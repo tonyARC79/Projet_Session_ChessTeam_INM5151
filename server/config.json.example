@@ -1,0 +1,10 @@
+{
+  "secret": "enter secret henre",
+  "database": {
+    "host": "localhost",
+    "user": "root",
+    "password": "",
+    "name": "chessmess",
+    "dialect": "mysql"
+  }
+}
