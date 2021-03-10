@@ -50,4 +50,44 @@ app.post('/join', cors(), [
   }
 })
 
+app.post("/session", [
+  body('email').isEmail().normalizeEmail().withMessage("Email must be valid").trim().escape()
+], (req, res) => {
+  const errors = validationResult(req)
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
+  }
+  models.user.findOne({
+    attributes: ['password'],
+    where: {
+      email: req.body.email,
+      date_deleted: null
+    }
+  })
+    .then(user => {
+      if (user) {
+        bcrypt.compare(req.body.password, user.password).then(function (response) {
+          if (response) {
+            let token = jwt.sign({
+              "id": user.user_id,
+              "email": user.email
+            }, config.secret, {
+              "expiresIn": "6h"
+            })
+            res.status(200).send({ "token": token });
+          } else {
+            res.status(400).json({ error: 'Email/Password was invalid' })
+          }
+        });
+      }
+      else {
+        res.status(400).json({ error: 'Email/Password was invalid' })
+      }
+    })
+    .catch(err => {
+      console.log(err)
+      res.status(500).json({ error: "Could not create session" })
+    })
+})
+
 module.exports = app;

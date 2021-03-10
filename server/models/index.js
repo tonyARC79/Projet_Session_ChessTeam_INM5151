@@ -17,8 +17,7 @@ const sequelize = new Sequelize(config.database.name, config.database.user, conf
     idle: 10000
   }, define: {
     timestamps: false
-  },
-  timezone: "America/Toronto"
+  }
 })
 
 fs
