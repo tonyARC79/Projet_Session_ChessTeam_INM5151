@@ -1,10 +1,53 @@
 var express = require('express');
+const { body, validationResult } = require('express-validator');
+const bcrypt = require('bcrypt')
+const models = require('./../models');
+const jwt = require('jsonwebtoken')
+var cors = require('cors')
+const config = require('../config')
 app = express()
 
-app.post('/join', (req, res) => {
-  res.status(200).json({
-    message: 'Le compte utilisateur est créer'
-  });
+app.post('/join', cors(), [
+  body('email').isEmail().normalizeEmail().withMessage("Email must be valid").trim().escape(),
+  body('password').isLength({ min: 5 }).isString().withMessage("Length must be more than 5 characters"),
+  body('username').isString().trim().isAlphanumeric(),
+  body('age').isNumeric(),
+], async (req, res) => {
+  let body = req.body
+  const errors = validationResult(req)
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
+  }
+  let emailInUse = await models.user.findOne({
+    where: {
+      email: req.body.email
+    }
+  })
+  if (emailInUse) {
+    return res.status(409).json({ error: body.email + " is already used" })
+  } else {
+    bcrypt.hash(body.password, 10, async (err, hash) => {
+      if (err) {
+        res.status(500).send("Internal server error")
+        console.log(err)
+      } else {
+        models.user.create({
+          username: body.username,
+          email: body.email,
+          password: hash,
+          age: body.age,
+        }).then(result => {
+          let token = jwt.sign({
+            "id": result.user_id,
+            "email": result.email
+          }, config.secret, {
+            "expiresIn": "6h"
+          })
+          res.status(201).json({ "token": token })
+        })
+      }
+    });
+  }
 })
 
 module.exports = app;
