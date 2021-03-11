@@ -14,7 +14,7 @@
 
   ## Contenu du projet
    ### Client
-   Ce répertoire contient tous les éléments du site web construit en React, il est le front-end du projet et aucun élément de back-end n'y est présent.
+   Ce répertoire contient tous les éléments du site web construit en Vue.js, il est le front-end du projet et aucun élément de back-end n'y est présent.
    + `src/`
    Ceci contient tout le code js de notre application web.
    + `src/assets/`
