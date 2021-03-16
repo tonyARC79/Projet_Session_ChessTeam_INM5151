@@ -8,29 +8,29 @@ let router = new Router({
     mode: 'history',
     base: process.env.BASE_URL,
     routes: [{
-            path: '/',
-            name: 'session',
-            component: () =>
-                import ('@/components/Login'),
-            meta: {
-                title: 'Session',
-            }
-        },
-        {
-            path: '*',
-            name: 'redirect',
-            component: () =>
-                import ('@/components/Login')
-        },
-        {
-            path: '/join',
-            name: 'join',
-            component: () =>
-                import ('@/components/Register'),
-            meta: {
-                title: 'Join',
-            }
-        },
+        path: '/',
+        name: 'session',
+        component: () =>
+            import('@/components/Login'),
+        meta: {
+            title: 'Session',
+        }
+    },
+    {
+        path: '*',
+        name: 'redirect',
+        component: () =>
+            import('@/components/Login')
+    },
+    {
+        path: '/join',
+        name: 'join',
+        component: () =>
+            import('@/components/Register'),
+        meta: {
+            title: 'Join',
+        }
+    },
     ]
 });
 
@@ -40,7 +40,7 @@ router.beforeEach((to, from, next) => {
             next()
             return
         }
-       next('/')
+        next('/')
     } else {
         next()
     }
