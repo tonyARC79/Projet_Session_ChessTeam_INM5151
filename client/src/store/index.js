@@ -11,27 +11,34 @@ export default new Vuex.Store({
   getters: {
   },
   mutations: {
+      /* inutile pour l'instant c'est pour l'authentification (token) et 
+       * présentement sert à enlever les erreurs
+       */
+      requete_auth(state) {
+            state.status = 'chargement'
+        },
+	auth_succes(state) {
+            state.status = 'succes'
+        },
 
+	auth_erreur(state) {
+            state.status = 'erreur'
+        },
   },
   actions: {
-    join() {
-      axios({
-        method: 'post', url: 'join', data: qs.stringify({
-          email: "antoine1.plante@uqam.ca",
-          password: "gr007,,",
-          username: "testtest123",
-          age: "18"
-        }),
-      })
-        .then(function (response) {
-          console.log(response);
-        })
-        .catch(function (error) {
-          if(error.response.status === 409) {
-            alert("Même courriel")
-          }
-        });
-    }
+    join({ commit }, nouvelUtilisateur) {
+            return new Promise((resolve, reject) => {
+                commit('requete_auth')
+                axios.post('/join', qs.stringify(nouvelUtilisateur))
+                    .then(resp => {
+                        resolve(resp)
+                    })
+                    .catch(err => {
+                        commit('auth_erreur', err)
+                        reject(err)
+                    })
+            })
+        },
   },
   modules: {}
 })

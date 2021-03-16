@@ -1,11 +1,8 @@
 <template>
-  <v-app>
   <div id="app">
     <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
-  </div>
   <router-view></router-view>
-  </v-app>
+  </div>
 </template>
 
 <script>
@@ -15,18 +12,6 @@ export default {
     $route(to) {
       document.title = to.meta.title || "Your Website";
     },
-  },
-  mounted() {
-    let payload = {
-      token: localStorage.getItem("token"),
-      user: JSON.parse(localStorage.getItem("user")),
-      obnl: JSON.parse(localStorage.getItem("obnl")),
-    };
-
-    if (payload.token) {
-      this.axios.defaults.headers.common["Authorization"] = payload.token;
-      this.$store.commit("auth_succes", payload);
-    }
   },
 };
 </script>
