@@ -14,22 +14,19 @@ export default new Vuex.Store({
 
   },
   actions: {
-    join() {
-      axios({
-        method: 'post', url:'join', data: qs.stringify({
-          email: "antoine1.plante@uqam.ca",
-          password: "gr007,,",
-          username: "testtest123",
-          age: "18"
-        }),
-      })
-        .then(function (response) {
-          console.log(response);
-        })
-        .catch(function (error) {
-          console.log(error);
-        });
-    }
+    join({ commit }, nouvelUtilisateur) {
+            return new Promise((resolve, reject) => {
+                commit('requete_auth')
+                axios.post('/join', qs.stringify(nouvelUtilisateur))
+                    .then(resp => {
+                        resolve(resp)
+                    })
+                    .catch(err => {
+                        commit('auth_erreur', err)
+                        reject(err)
+                    })
+            })
+        },
   },
   modules: {}
 })

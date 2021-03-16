@@ -7,7 +7,7 @@ import store from './store'
 
 Vue.config.productionTip = false
 
-axios.defaults.withCredentials = true
+axios.defaults.withCredentials = false
 
 new Vue({
     router,
