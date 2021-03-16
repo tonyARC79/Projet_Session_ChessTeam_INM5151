@@ -16,7 +16,7 @@ export default new Vuex.Store({
   actions: {
     join() {
       axios({
-        method: 'post', url:'join', data: qs.stringify({
+        method: 'post', url: 'join', data: qs.stringify({
           email: "antoine1.plante@uqam.ca",
           password: "gr007,,",
           username: "testtest123",
@@ -27,7 +27,9 @@ export default new Vuex.Store({
           console.log(response);
         })
         .catch(function (error) {
-          console.log(error);
+          if(error.response.status === 409) {
+            alert("Même courriel")
+          }
         });
     }
   },
