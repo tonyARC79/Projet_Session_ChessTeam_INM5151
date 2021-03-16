@@ -37,12 +37,15 @@ app.post('/join', cors(), [
           password: hash,
           age: body.age,
         }).then(result => {
-          let token = jwt.sign({
-            "id": result.user_id,
-            "email": result.email
-          }, config.secret, {
-            "expiresIn": "6h"
-          })
+          let token = jwt.sign(
+            {
+              "id": result.user_id,
+              "email": result.email
+            },
+            config.secret,
+            {
+              "expiresIn": "6h"
+            })
           res.status(201).json({ "token": token })
         })
       }
@@ -58,7 +61,7 @@ app.post("/session", [
     return res.status(400).json({ errors: errors.array() });
   }
   models.user.findOne({
-    attributes: ['password'],
+    attributes: ['password', 'user_id', 'email'],
     where: {
       email: req.body.email,
       date_deleted: null
