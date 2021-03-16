@@ -11,7 +11,19 @@ export default new Vuex.Store({
   getters: {
   },
   mutations: {
+      /* inutile pour l'instant c'est pour l'authentification (token) et 
+       * présentement sert à enlever les erreurs
+       */
+      requete_auth(state) {
+            state.status = 'chargement'
+        },
+	auth_succes(state) {
+            state.status = 'succes'
+        },
 
+	auth_erreur(state) {
+            state.status = 'erreur'
+        },
   },
   actions: {
     join({ commit }, nouvelUtilisateur) {
