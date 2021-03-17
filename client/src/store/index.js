@@ -48,6 +48,23 @@ export default new Vuex.Store({
             reject(err)
           })
       })
+    },
+    findFriends({ commit }, searchQuery) {
+      return new Promise((resolve, reject) => {
+        commit('requete_auth')
+        axios.get('/api/users?username=' + searchQuery,
+          {
+            headers:
+              { "Authorization": 'Bearer ' + localStorage.getItem('token') }
+          })
+          .then(resp => {
+            resolve(resp.data)
+          })
+          .catch(err => {
+            commit('auth_erreur', err)
+            reject(err)
+          })
+      })
     }
   },
   modules: {}
