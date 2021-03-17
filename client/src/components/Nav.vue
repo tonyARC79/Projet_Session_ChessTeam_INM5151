@@ -1,7 +1,7 @@
 <template>
-  <div id="app">
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-      <router-link class="navbar-brand" to="/home"><Strong>ChessMess</Strong></router-link>
+    <div>
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <a class="navbar-brand" href="#"><Strong>ChessMess</Strong></a>
       <button
         class="navbar-toggler"
         type="button"
@@ -16,31 +16,31 @@
       <div class="collapse navbar-collapse" id="navbarNavDropdown">
         <ul class="navbar-nav">
           <li class="nav-item active">
-            <router-link class="nav-link" to="/home"
-              >Home <span class="sr-only">(current)</span></router-link
+            <a class="nav-link" href="#"
+              >Home <span class="sr-only">(current)</span></a
             >
           </li>
           <li class="nav-item">
-            <router-link class="nav-link" to="/join">Inscription</router-link>
+            <a class="nav-link" href="#">Inscription</a>
           </li>
           <li class="nav-item">
-            <router-link class="nav-link" to="/login">Login</router-link>
+            <a class="nav-link" href="#">Login</a>
           </li>
           <li class="nav-item dropdown">
-            <router-link
+            <a
               class="nav-link dropdown-toggle"
-              to="#"
+              href="#"
               id="navbarDropdownMenuLink"
               data-toggle="dropdown"
               aria-haspopup="true"
               aria-expanded="false"
             >
               Jouer!
-            </router-link>
+            </a>
             <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-              <router-link class="dropdown-item" to="#">Action</router-link>
-              <router-link class="dropdown-item" to="#">Another action</router-link>
-              <router-link class="dropdown-item" to="#">Something else here</router-link>
+              <a class="dropdown-item" href="#">Action</a>
+              <a class="dropdown-item" href="#">Another action</a>
+              <a class="dropdown-item" href="#">Something else here</a>
             </div>
           </li>
           <li>
@@ -63,27 +63,12 @@
       </div>
     </nav>
     <br /><br /><br />
-    <router-view></router-view>
-  </div>
+    </div>
 </template>
+
 
 <script>
 export default {
-  watch: {
-    $route(to) {
-      document.title = to.meta.title || "Your Website";
-    },
-  },
-};
-</script>
-
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+    
 }
-</style>
+</script>

@@ -1,17 +1,22 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import store from '../store'
-
+import Login from '@/components/Login'
+import Register from '@/components/Register'
+import Home from '@/components/Home'
 Vue.use(Router)
 
 let router = new Router({
     mode: 'history',
     base: process.env.BASE_URL,
     routes: [{
+        path: '/home',
+        name: 'home',
+        component: Home
+    }, {
         path: '/',
         name: 'session',
-        component: () =>
-            import('@/components/Login'),
+        component: Login,
         meta: {
             title: 'Session',
         }
@@ -19,14 +24,12 @@ let router = new Router({
     {
         path: '*',
         name: 'redirect',
-        component: () =>
-            import('@/components/Login')
+        component: Login
     },
     {
         path: '/join',
         name: 'join',
-        component: () =>
-            import('@/components/Register'),
+        component: Register,
         meta: {
             title: 'Join',
         }
