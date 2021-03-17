@@ -1,7 +1,9 @@
 <template>
   <div id="app">
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
-      <router-link class="navbar-brand" to="/home"><Strong>ChessMess</Strong></router-link>
+      <router-link class="navbar-brand" to="/home"
+        ><Strong>ChessMess</Strong></router-link
+      >
       <button
         class="navbar-toggler"
         type="button"
@@ -39,8 +41,12 @@
             </router-link>
             <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
               <router-link class="dropdown-item" to="#">Action</router-link>
-              <router-link class="dropdown-item" to="#">Another action</router-link>
-              <router-link class="dropdown-item" to="#">Something else here</router-link>
+              <router-link class="dropdown-item" to="#"
+                >Another action</router-link
+              >
+              <router-link class="dropdown-item" to="#"
+                >Something else here</router-link
+              >
             </div>
           </li>
           <li>

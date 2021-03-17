@@ -9,13 +9,11 @@ import axios from "../utils/apiService/";
 export default {
   name: "Home",
   async loggedIn() {
-    const response = await axios.get('/users', {
+    await axios.get('/users', {
       HEADERS: {
         "Authorization": 'Bearer ' + localStorage.getItem('token')
       }
     })
-    
-    console.log(response)
   }
 };
 

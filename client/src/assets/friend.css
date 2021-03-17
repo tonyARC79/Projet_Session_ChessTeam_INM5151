@@ -1,0 +1,20 @@
+
+.friend-container {
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+} 
+
+.friend-search-bar {
+  justify-content: normal;
+  text-align:center;
+  align-self: center;
+  display: inline-block;
+  width: 55%;
+}
+.friend-search-list {
+  text-align:center;
+  align-self: center;
+  display: inline-block;
+  width: 55%;
+}
