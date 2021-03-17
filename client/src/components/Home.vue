@@ -1,24 +1,22 @@
 <template>
-  <div class="home">
+  
     <h1>Bienvenue sur la plateforme ChessMess!</h1>
-  </div>
+  
 </template>
 
 <script>
 import axios from "../utils/apiService/";
 export default {
   name: "Home",
-  methods: {
-    async loggedIn() {
-      const response = await axios.get("/profil", {
-        headers: {
-          Authorization: localStorage.getItem("token")
-        },
-      });
-      console.log(response);
-      
-    },
-  },
+  async loggedIn() {
+    const response = await axios.get('/users', {
+      HEADERS: {
+        "Authorization": 'Bearer ' + localStorage.getItem('token')
+      }
+    })
+    
+    console.log(response)
+  }
 };
 
 //{"websocket":true,"origins":["*:*"],"cookie_needed":false,"entropy":1051744105}
