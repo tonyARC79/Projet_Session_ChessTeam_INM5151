@@ -1,11 +1,12 @@
 <template>
   <div>
-    <h1>ChessMess</h1><br>
-    <form @submit.prevent="login">
+    <h1>ChessMess</h1>
+    <br />
+    <form @submit.prevent="processLogin">
       <input
         type="email"
         name="name"
-        v-model="userInfos.email"
+        v-model="email"
         placeholder="email"
         id="email"
       />
@@ -14,7 +15,7 @@
       <input
         type="password"
         name="password"
-        v-model="userInfos.password"
+        v-model="password"
         placeholder="password"
         id="pwd"
       />
@@ -28,27 +29,27 @@
 <script>
 import axios from "../utils/apiService/";
 export default {
+  name: "Login",
   data() {
     return {
-      userInfos: {
-        email: '',
-        password: '',
-      },
-      formulaireValide: true,
-      utilsateurNonUnique: false,
+      email: "",
+      password: "",
+
+      //formulaireValide: true,
+      //utilsateurNonUnique: false,
     };
   },
   methods: {
-    async login() {
+    async processLogin() {
       const response = await axios.post("/session", {
-        email: this.userInfos.email,
-        password: this.userInfos.password,
+        email: this.email,
+        password: this.password,
       });
 
       //console.log(response)
-      localStorage.setItem('token', response.data.token)
-      console.log(localStorage.getItem('token'))
-      this.$router.push('/home')
+      localStorage.setItem("token", response.data.token);
+      console.log(localStorage.getItem("token"));
+      this.$router.push("/home");
     },
   },
 };

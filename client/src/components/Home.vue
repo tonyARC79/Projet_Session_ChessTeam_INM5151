@@ -1,22 +1,29 @@
 <template>
-  
-    <h1>Bienvenue sur la plateforme ChessMess!</h1>
-  
+  <h3 v-if="user">
+    Bonjour {{ user.username }} ! Bienvenue sur ChessMess.com :)
+  </h3>
 </template>
 
 <script>
 import axios from "../utils/apiService/";
 export default {
   name: "Home",
-  async loggedIn() {
-    const response = await axios.get('/users', {
-      HEADERS: {
-        "Authorization": 'Bearer ' + localStorage.getItem('token')
-      }
-    })
-    
-    console.log(response)
-  }
+
+  data() {
+    return {
+      user: null,
+    };
+  },
+
+  async created() {
+    const response = await axios.get("/api/profil", {
+      headers: {
+        Authorization: "Bearer " + localStorage.getItem("token"),
+      },
+    });
+
+    this.user = response.data;
+  },
 };
 
 //{"websocket":true,"origins":["*:*"],"cookie_needed":false,"entropy":1051744105}
