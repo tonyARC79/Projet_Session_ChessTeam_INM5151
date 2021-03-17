@@ -14,19 +14,27 @@
               ></b-icon>
             </b-button>
           </template>
-          <b-form-input></b-form-input>
+          <b-form-input
+            v-model="searchQuery"
+            v-on:keyup.13="findFriends"
+          ></b-form-input>
         </b-input-group>
       </div>
       <div class="friend-search-list">
         <div class="list-group">
-
-          <a href="#" class="list-group-item list-group-item-action" v-for="item in lesUtilisateurs" :key="item.username">
+          <a
+            href="#"
+            class="list-group-item list-group-item-action"
+            v-for="item in lesUtilisateurs"
+            :key="item.username"
+          >
             <div class="d-flex w-100 justify-content-between">
               <b-icon icon="person-fill" aria-hidden="true"></b-icon>
             </div>
-            <p class="mb-1">{{item.username}}</p>
+            <p class="mb-1">{{ item.username }}</p>
             <small>date register</small>
           </a>
+            <p v-if="noResult">Aucun utilisateur ne correspond à votre recherche</p>
         </div>
       </div>
     </div>
@@ -37,6 +45,7 @@ export default {
   data: () => ({
     lesUtilisateurs: [],
     searchQuery: "",
+    noResult: false,
   }),
   methods: {
     findFriends() {
@@ -44,6 +53,11 @@ export default {
         .dispatch("findFriends", this.searchQuery)
         .then((lesUtilisateurs) => {
           this.lesUtilisateurs = lesUtilisateurs;
+          if (lesUtilisateurs.length == 0) {
+            this.noResult = true;
+          } else {
+            this.noResult = false;
+          }
         })
         .catch((error) => {
           console.log(error);
