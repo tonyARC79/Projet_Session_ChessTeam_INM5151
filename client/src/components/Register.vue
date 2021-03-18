@@ -128,6 +128,7 @@ export default {
           })
           .catch((error) => {
             if (error.response.status === 409) {
+              this.formulaireValide = false;
               alert("Un autre utilisateur utilise ce courriel!?");
             }
           });
