@@ -1,38 +1,35 @@
 <template>
   <div id="app">
-    <Nav :user="user"/>
-    <router-view :user="user"></router-view>
+    <Nav :username="username"> </Nav>
+    <router-view :username="username"></router-view>
   </div>
 </template>
 
 <script>
-import Nav from '@/components/Nav'
-import axios from "@/utils/apiService/";
+import Nav from "@/components/Nav";
+import store from "./store";
 export default {
-  name: 'App',
+  name: "App",
   components: {
-    Nav
-
+    Nav,
   },
   data() {
     return {
-      user: null,
+      username: null,
     };
   },
-
-  async created() {
-    const response = await axios.get("/api/profil", {
-      headers: {
-        Authorization: "Bearer " + localStorage.getItem("token"),
-      },
+  created: function () {
+    this.username = store.getters.username
+    this.$http.interceptors.response.use(undefined, function (err) {
+      return new Promise(function () {
+        if (err.status === 401 && err.config && !err.config.__isRetryRequest) {
+          this.$store.dispatch("logout").then(() => {
+            this.$router.push("/login");
+          });
+        }
+        throw err;
+      });
     });
-
-    this.user = response.data;
-  },
-  watch: {
-    $route(to) {
-      document.title = to.meta.title || "Your Website";
-    },
   },
 };
 </script>

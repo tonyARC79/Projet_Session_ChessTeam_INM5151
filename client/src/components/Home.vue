@@ -1,17 +1,17 @@
 <template>
   <div>
-    <h3 v-if="user">
-      Bonjour {{ user.username }} ! Bienvenue sur ChessMess.com :)
+    <h3 v-if="username">
+      Bonjour {{ username }} ! Bienvenue sur ChessMess.com :)
     </h3>
 
-    <h3 v-if="!user">Désolé, vous n'êtes pas authentifié :(</h3>
+    <h3 v-if="!username">Désolé, vous n'êtes pas authentifié :(</h3>
   </div>
 </template>
 
 <script>
 export default {
   name: "Home",
-  props: ["user"],
+  props: ["username"],
 };
 
 //{"websocket":true,"origins":["*:*"],"cookie_needed":false,"entropy":1051744105}

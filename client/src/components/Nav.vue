@@ -26,7 +26,7 @@
             <router-link class="nav-link" to="#">Profil</router-link>
           </li>
 
-          <span v-if="!user">
+          <span v-if="!username">
             <li class="nav-item">
               <router-link class="nav-link" to="/login">Login</router-link>
             </li>
@@ -39,9 +39,11 @@
             </li>
           </span>
 
-          <span v-if="user"
+          <span v-if="username"
             ><li class="nav-item">
-              <a class="nav-link" href="javascript:void(0)" @click="handleClick">Logout</a>
+              <a class="nav-link" href="javascript:void(0)" @click="handleClick"
+                >Logout</a
+              >
             </li></span
           >
 
@@ -93,15 +95,13 @@
 <script>
 export default {
   name: "Nav",
-  props: ["user"],
+  props: ["username"],
   methods: {
-    async handleClick () {
-      // On remove le token du localStorage
-      localStorage.removeItem('token')
-
-      // Ensuite on redirect vers /home
-      this.$router.push('/home')
-    }
+    async handleClick() {
+      this.$store.dispatch("logout").then(() => {
+        this.$router.push("/login");
+      });
+    },
   },
 };
 </script>

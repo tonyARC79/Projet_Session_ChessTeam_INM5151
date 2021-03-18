@@ -2,7 +2,7 @@
   <div>
     <h1>ChessMess</h1>
     <br />
-    <form @submit.prevent="processLogin">
+    <form @submit.prevent="login">
       <input
         type="email"
         name="name"
@@ -27,7 +27,6 @@
 </template>
 
 <script>
-import axios from "../utils/apiService/";
 export default {
   name: "Login",
   data() {
@@ -40,15 +39,18 @@ export default {
     };
   },
   methods: {
-    async processLogin() {
-      const response = await axios.post("/session", {
-        email: this.email,
-        password: this.password,
-      });
-
-      //console.log(response)
-      localStorage.setItem("token", response.data.token);
-      this.$router.push("/home");
+    login() {
+      this.$store
+        .dispatch("login", {
+          email: this.email,
+          password: this.password,
+        })
+        .then(() => {
+          this.$router.push("/home");
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     },
   },
 };
