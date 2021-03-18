@@ -21,25 +21,6 @@
       />
       <br /><br />
 
-      <input
-        type="email"
-        name="name"
-        v-model="email"
-        placeholder="email"
-        id="email"
-      />
-      <br />
-      <br />
-      <input
-        type="password"
-        name="password"
-        v-model="password"
-        placeholder="password"
-        id="pwd"
-      />
-      <br /><br />
-
-      <button ref="">Login</button>
       <button type="submit">Login</button>
     </form>
   </div>
