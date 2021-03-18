@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <Nav :username="username"> </Nav>
+    <Nav :isLoggedOn="isLoggedOn"> </Nav>
     <router-view :username="username"></router-view>
   </div>
 </template>
@@ -16,6 +16,7 @@ export default {
   data() {
     return {
       username: store.getters.username,
+      isLoggedOn: store.getters.isAuthenticated,
     };
   },
   created: function () {
@@ -40,6 +41,5 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
 }
 </style>

@@ -1,7 +1,7 @@
 <template>
   <div>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
-      <router-link class="navbar-brand" to="/home"
+      <router-link class="navbar-brand" to="/"
         ><Strong>ChessMess</Strong></router-link
       >
       <button
@@ -16,7 +16,7 @@
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="navbarNavDropdown">
-        <ul class="navbar-nav">
+        <ul class="navbar-nav mr-auto">
           <li class="nav-item active">
             <router-link class="nav-link" to="/home"
               >Home <span class="sr-only">(current)</span></router-link
@@ -25,28 +25,17 @@
           <li class="nav-item">
             <router-link class="nav-link" to="#">Profil</router-link>
           </li>
-
-          <span v-if="!username">
-            <li class="nav-item">
-              <router-link class="nav-link" to="/login">Login</router-link>
-            </li>
-            <li class="nav-item dropdown"></li>
-
-            <li class="nav-item">
-              <router-link class="nav-link" to="/join"
-                >Inscription
-              </router-link>
-            </li>
-          </span>
-
-          <span v-if="username"
-            ><li class="nav-item">
-              <a class="nav-link" href="javascript:void(0)" @click="handleClick"
-                >Logout</a
-              >
-            </li></span
-          >
-
+          <li v-if="isLoggedOn" class="nav-item">
+            <a class="nav-link" href="javascript:void(0)" @click="handleClick"
+              >Logout</a
+            >
+          </li>
+          <li vi-else class="nav-item">
+            <router-link class="nav-link" to="/login">Login</router-link>
+          </li>
+          <li vi-else class="nav-item">
+            <router-link class="nav-link" to="/join">Inscription </router-link>
+          </li>
           <li class="nav-item dropdown">
             <router-link
               class="nav-link dropdown-toggle"
@@ -68,6 +57,8 @@
               >
             </div>
           </li>
+        </ul>
+        <ul class="navbar-nav ml-auto">
           <li>
             <form class="form-inline">
               <input
