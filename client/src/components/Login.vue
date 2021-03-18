@@ -1,6 +1,7 @@
 <template>
   <div>
-    <h1>ChessMess</h1><br>
+    <h1>ChessMess</h1>
+    <br />
     <form @submit.prevent="login">
       <input
         type="email"
@@ -20,25 +21,25 @@
       />
       <br /><br />
 
-    <input
-      type="email"
-      name="name"
-      v-model="email"
-      placeholder="email"
-      id="email"
-    />
-    <br />
-    <br />
-    <input
-      type="password"
-      name="password"
-      v-model="password"
-      placeholder="password"
-      id="pwd"
-    />
-    <br /><br />
+      <input
+        type="email"
+        name="name"
+        v-model="email"
+        placeholder="email"
+        id="email"
+      />
+      <br />
+      <br />
+      <input
+        type="password"
+        name="password"
+        v-model="password"
+        placeholder="password"
+        id="pwd"
+      />
+      <br /><br />
 
-    <button ref="">Login</button>
+      <button ref="">Login</button>
       <button type="submit">Login</button>
     </form>
   </div>
@@ -49,13 +50,9 @@ import axios from "../utils/apiService/";
 export default {
   data() {
     return {
-      email: "",
-      password: "",
-    };
-  },
       userInfos: {
-        email: '',
-        password: '',
+        email: "",
+        password: "",
       },
       formulaireValide: true,
       utilsateurNonUnique: false,
@@ -69,9 +66,9 @@ export default {
       });
 
       //console.log(response)
-      localStorage.setItem('token', response.data.token)
-      console.log(localStorage.getItem('token'))
-      this.$router.push('/home')
+      localStorage.setItem("token", response.data.token);
+      console.log(localStorage.getItem("token"));
+      this.$router.push("/home");
     },
   },
 };
