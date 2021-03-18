@@ -90,4 +90,29 @@ app.get("/profil", authorized(), cors(), async (req, res) => {
 });
 
 
+app.get("/me/friends", authorized(), cors(), async (req, res) => {
+  let userID = jwt.decode(req.get("Authorization").split(" ")[1]);
+  userID = userID.id;
+  models.user.findOne({
+    attributes: ['username'],
+    where: {
+      user_id: userID
+    },
+    include: [{
+      model: models.user,
+      as: 'Relating',
+      attributes: ['username'],
+      through: { attributes: [] },
+    }],
+  })
+    .then(users => {
+      res.json(users)
+    })
+    .catch(err => {
+      console.log(err)
+      res.status(500).json({ error: "Server Error" })
+    });
+});
+
+
 module.exports = app;
