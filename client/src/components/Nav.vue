@@ -1,7 +1,9 @@
 <template>
-    <div>
-        <nav class="navbar navbar-expand-lg navbar-light bg-light">
-      <a class="navbar-brand" href="#"><Strong>ChessMess</Strong></a>
+  <div>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <router-link class="navbar-brand" to="/home"
+        ><Strong>ChessMess</Strong></router-link
+      >
       <button
         class="navbar-toggler"
         type="button"
@@ -16,31 +18,52 @@
       <div class="collapse navbar-collapse" id="navbarNavDropdown">
         <ul class="navbar-nav">
           <li class="nav-item active">
-            <a class="nav-link" href="#"
-              >Home <span class="sr-only">(current)</span></a
+            <router-link class="nav-link" to="/home"
+              >Home <span class="sr-only">(current)</span></router-link
             >
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#">Inscription</a>
+            <router-link class="nav-link" to="#">Profil</router-link>
           </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">Login</a>
-          </li>
+
+          <span v-if="!user">
+            <li class="nav-item">
+              <router-link class="nav-link" to="/login">Login</router-link>
+            </li>
+            <li class="nav-item dropdown"></li>
+
+            <li class="nav-item">
+              <router-link class="nav-link" to="/join"
+                >Inscription
+              </router-link>
+            </li>
+          </span>
+
+          <span v-if="user"
+            ><li class="nav-item">
+              <a class="nav-link" href="javascript:void(0)" @click="handleClick">Logout</a>
+            </li></span
+          >
+
           <li class="nav-item dropdown">
-            <a
+            <router-link
               class="nav-link dropdown-toggle"
-              href="#"
+              to="#"
               id="navbarDropdownMenuLink"
               data-toggle="dropdown"
               aria-haspopup="true"
               aria-expanded="false"
             >
               Jouer!
-            </a>
+            </router-link>
             <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-              <a class="dropdown-item" href="#">Action</a>
-              <a class="dropdown-item" href="#">Another action</a>
-              <a class="dropdown-item" href="#">Something else here</a>
+              <router-link class="dropdown-item" to="#">Action</router-link>
+              <router-link class="dropdown-item" to="#"
+                >Another action</router-link
+              >
+              <router-link class="dropdown-item" to="#"
+                >Something else here</router-link
+              >
             </div>
           </li>
           <li>
@@ -63,12 +86,22 @@
       </div>
     </nav>
     <br /><br /><br />
-    </div>
+  </div>
 </template>
 
 
 <script>
 export default {
-    
-}
+  name: "Nav",
+  props: ["user"],
+  methods: {
+    async handleClick () {
+      // On remove le token du localStorage
+      localStorage.removeItem('token')
+
+      // Ensuite on redirect vers /home
+      this.$router.push('/home')
+    }
+  },
+};
 </script>

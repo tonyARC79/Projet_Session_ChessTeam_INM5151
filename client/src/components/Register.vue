@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1>ChessMess Login</h1> <br>
+    <h1>Inscription</h1> <br>
 
     <input
       type="username"
