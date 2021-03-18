@@ -30,6 +30,9 @@ app.get("/user/valid", cors(), async (req, res) => {
 
 app.get("/users", authorized(), cors(), async (req, res) => {
   let username = decodeURI(req.query.username);
+  if (username == "") {
+    return res.json([])
+  }
 
   models.user.findAll({
     attributes: ['username'],

@@ -3,6 +3,7 @@ import Router from 'vue-router'
 import store from '../store'
 import Login from '@/components/Login'
 import Register from '@/components/Register'
+import FindFriends from '@/components/Friend/FriendSearch'
 import Home from '@/components/Home'
 Vue.use(Router)
 
@@ -34,6 +35,14 @@ let router = new Router({
             title: 'Inscription',
         }
     },
+    {
+        path: '/friends/find',
+        name: 'find friends',
+        component: FindFriends,
+        meta: {
+            title: 'Find friends',
+        }
+    }
     ]
 });
 
