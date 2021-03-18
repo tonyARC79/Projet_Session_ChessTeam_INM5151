@@ -15,11 +15,10 @@ export default {
   },
   data() {
     return {
-      username: null,
+      username: store.getters.username,
     };
   },
   created: function () {
-    this.username = store.getters.username
     this.$http.interceptors.response.use(undefined, function (err) {
       return new Promise(function () {
         if (err.status === 401 && err.config && !err.config.__isRetryRequest) {
