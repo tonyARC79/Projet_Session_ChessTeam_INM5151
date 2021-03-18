@@ -41,21 +41,23 @@ let router = new Router({
         component: FindFriends,
         meta: {
             title: 'Find friends',
+            requiresAuth: true
         }
     }
     ]
 });
 
 router.beforeEach((to, from, next) => {
-    if (to.matched.some(record => record.meta.requiredAuth)) {
-        if (store.getters.estConnecte) {
-            next()
-            return
+    if(to.matched.some(record => record.meta.requiresAuth)) {
+        if (store.getters.isAuthenticated) {
+          next()
+          return
         }
-        next('/')
-    } else {
+        // TODO: rediriger vers la page de non authorisation
+        next('/login')
+      } else {
         next()
-    }
+      }
 })
 
 export default router
