@@ -26,6 +26,7 @@
         <br />
         <span class="error text-danger">{{ errors.email }}</span>
         <span class="error text-danger">{{ errors.email2 }}</span>
+        <span class="error text-danger">{{ errors.email3 }}</span>
       </div>
       <br />
       <div>
@@ -112,9 +113,6 @@ export default {
       if (!this.newUser.age) {
         this.errors.age = "L'âge est obligatoire";
       }
-      if (!this.newUser.age) {
-        this.errors.age = "L'âge est obligatoire";
-      }
       if (Object.keys(this.errors).length === 0) {
         this.formulaireValide = true;
       }
@@ -130,17 +128,10 @@ export default {
           })
           .catch((error) => {
             if (error.response.status === 409) {
-              this.utilsateurNonUnique = true;
+              alert("Un autre utilisateur utilise ce courriel!?");
             }
           });
       }
-    },
-    mdpPareil() {
-      if (this.nouvelUtilisateur.password)
-        return this.nouvelUtilisateur.password ===
-          this.nouvelUtilisateur.password
-          ? ""
-          : "Le champs Confirmation du mot de passe doit être comme le champs Mot de passe";
     },
   },
 };

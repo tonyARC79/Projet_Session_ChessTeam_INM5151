@@ -31,7 +31,7 @@ let router = new Router({
         name: 'join',
         component: Register,
         meta: {
-            title: 'Join',
+            title: 'Inscription',
         }
     },
     ]

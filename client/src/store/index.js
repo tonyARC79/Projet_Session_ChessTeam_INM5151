@@ -36,10 +36,10 @@ export default new Vuex.Store({
     },
   },
   actions: {
-    join({ commit }, nouvelUtilisateur) {
+    join({ commit }, newUser) {
       return new Promise((resolve, reject) => {
         commit('requete_auth')
-        axios.post('/join', qs.stringify(nouvelUtilisateur))
+        axios.post('/join', qs.stringify(newUser))
           .then(resp => {
             resolve(resp)
           })
