@@ -1,13 +1,12 @@
 <template>
   <div>
-    <h1>ChessMess Login</h1>
+    <h1>Inscription</h1> <br>
 
     <input
       type="username"
       name="username"
       v-model="nouvelUtilisateur.username"
       placeholder="username"
-      id="email"
     />
     <br />
     <br />
@@ -16,7 +15,6 @@
       name="email"
       v-model="nouvelUtilisateur.email"
       placeholder="email"
-      id="pwd"
     />
     <br /><br />
     <input
@@ -24,7 +22,6 @@
       name="password"
       v-model="nouvelUtilisateur.password"
       placeholder="password"
-      id="pwd"
     />
     <br /><br />
     <input
@@ -32,7 +29,6 @@
       name="age"
       v-model="nouvelUtilisateur.age"
       placeholder="age"
-      id="pwd"
     />
     <br /><br />
     <button ref="" type="submit" v-on:click="join">Register</button>
