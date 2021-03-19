@@ -39,7 +39,7 @@
           <li class="nav-item dropdown">
             <router-link
               class="nav-link dropdown-toggle"
-              to="#"
+              to="/play"
               id="navbarDropdownMenuLink"
               data-toggle="dropdown"
               aria-haspopup="true"
