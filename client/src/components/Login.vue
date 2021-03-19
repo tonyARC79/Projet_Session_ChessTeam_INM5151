@@ -2,6 +2,7 @@
   <div>
     <h1>ChessMess</h1>
     <br />
+    <div>
     <form @submit.prevent="login">
       <input
         type="email"
@@ -23,6 +24,7 @@
 
       <button type="submit">Login</button>
     </form>
+    </div>
   </div>
 </template>
 
@@ -44,9 +46,6 @@ export default {
         .dispatch("login", {
           email: this.email,
           password: this.password,
-        })
-        .then(() => {
-          this.$router.push("/home");
         })
         .catch((error) => {
           console.log(error);

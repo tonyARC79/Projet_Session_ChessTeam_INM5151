@@ -24,7 +24,7 @@ export default {
       return new Promise(function () {
         if (err.status === 401 && err.config && !err.config.__isRetryRequest) {
           this.$store.dispatch("logout").then(() => {
-            this.$router.push("/login");
+            this.$router.push("/");
           });
         }
         throw err;

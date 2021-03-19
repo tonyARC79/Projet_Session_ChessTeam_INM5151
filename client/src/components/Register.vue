@@ -21,7 +21,7 @@
           name="email"
           v-model="newUser.email"
           placeholder="courriel"
-          id="pwd"
+          
         />
         <br />
         <span class="error text-danger">{{ errors.email }}</span>
@@ -48,7 +48,7 @@
           name="password"
           v-model="newUser.password2"
           placeholder="validation mot de passe"
-          id="pwd"
+          id="pwd2"
         />
         <br />
         <span class="error text-danger">{{ errors.password2 }}</span>
@@ -62,7 +62,7 @@
           name="age"
           v-model="newUser.age"
           placeholder="age"
-          id="pwd"
+          
         />
         <br />
         <span class="error text-danger">{{ errors.age }}</span>
