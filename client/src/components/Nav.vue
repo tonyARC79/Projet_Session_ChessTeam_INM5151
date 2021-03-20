@@ -1,7 +1,7 @@
 <template>
   <div>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
-      <router-link class="navbar-brand" to="/"
+      <router-link class="navbar-brand" to="/home"
         ><Strong>ChessMess</Strong></router-link
       >
       <button
@@ -17,16 +17,11 @@
       </button>
       <div class="collapse navbar-collapse" id="navbarNavDropdown">
         <ul class="navbar-nav mr-auto">
-          <li class="nav-item active">
-            <router-link class="nav-link" to="/home"
-              >Home <span class="sr-only">(current)</span></router-link
-            >
-          </li>
           <li class="nav-item">
-            <router-link class="nav-link" to="#">Profil</router-link>
+            <router-link class="nav-link" to="/user/view_profile">Profil</router-link>
           </li>
           <li v-if="isLoggedOn" class="nav-item">
-            <a class="nav-link" href="javascript:void(0)" @click="handleClick"
+            <a class="nav-link" href="" @click="handleClick"
               >Logout</a
             >
           </li>
@@ -53,7 +48,7 @@ export default {
   methods: {
     async handleClick() {
       this.$store.dispatch("logout").then(() => {
-        this.$router.go();
+        this.$router.push('/');
       });
     },
   },

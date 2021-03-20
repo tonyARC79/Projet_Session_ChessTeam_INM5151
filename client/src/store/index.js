@@ -69,6 +69,24 @@ export default new Vuex.Store({
           })
       })
     },
+    loadProfile({ commit }, searchQuery) {
+      return new Promise((resolve, reject) => {
+        commit('requete_auth')
+        //console.log(localStorage.getItem('token'))
+        axios.get('/api/profil?email=' + searchQuery,
+          {
+            headers:
+              { "Authorization": 'Bearer ' + localStorage.getItem('token') }
+          })
+          .then(resp => {
+            resolve(resp.data)
+          })
+          .catch(err => {
+            commit('auth_erreur', err)
+            reject(err)
+          })
+      })
+    },
     login({ commit }, user) {
       return new Promise((resolve, reject) => {
         commit('requete_auth')
@@ -81,8 +99,9 @@ export default new Vuex.Store({
             commit({
               type: 'auth_success',
               token: token,
-              username: username
+              username: username  
             })
+            console.log(resp.token)
             resolve(resp)
           })
           .catch(err => {

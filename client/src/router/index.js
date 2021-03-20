@@ -5,6 +5,7 @@ import Login from '@/components/Login'
 import Register from '@/components/Register'
 import FindFriends from '@/components/Friend/FriendSearch'
 import Home from '@/components/Home'
+import Profil from '@/components/Profil'
 Vue.use(Router)
 
 let router = new Router({
@@ -35,6 +36,15 @@ let router = new Router({
             title: 'Inscription',
         }
     },
+    {
+        path: '/user/view_profile',
+        name: 'viewProfile',
+        component: Profil,
+        meta: {
+            title: 'Inscription',
+        }
+    },
+    
     {
         path: '/friends/find',
         name: 'find friends',
