@@ -35,7 +35,29 @@
           <li v-if="!isLoggedOn" class="nav-item">
             <router-link class="nav-link" to="/join">Inscription </router-link>
           </li>
+          <li class="nav-item dropdown">
+            <router-link
+              class="nav-link dropdown-toggle"
+              to="/play"
+              id="navbarDropdownMenuLink"
+              data-toggle="dropdown"
+              aria-haspopup="true"
+              aria-expanded="false"
+            >
+              Jouer!
+            </router-link>
+            <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+              <router-link class="dropdown-item" to="#">Action</router-link>
+              <router-link class="dropdown-item" to="#"
+                >Another action</router-link
+              >
+              <router-link class="dropdown-item" to="#"
+                >Something else here</router-link
+              >
+            </div>
+          </li>
         </ul>
+        
       </div>
     </nav>
 
