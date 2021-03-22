@@ -6,6 +6,7 @@ import Register from '@/components/Register'
 import FindFriends from '@/components/Friend/FriendSearch'
 import Home from '@/components/Home'
 import Profil from '@/components/Profil'
+import Play from '@/components/Play'
 import Tutorial from '@/components/Tutorial/Tutorial.vue'
 Vue.use(Router)
 
@@ -54,6 +55,15 @@ let router = new Router({
             title: 'Find friends',
             requiresAuth: true
         }
+    },
+    {
+        path: '/play',
+        name: 'play',
+        component: Play,
+        meta: {
+            title: 'play',
+            requiresAuth: true
+        },
     },
     {
         path: '/tutorial',
