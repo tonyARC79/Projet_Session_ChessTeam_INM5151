@@ -90,7 +90,7 @@ export default new Vuex.Store({
     login({ commit }, user) {
       return new Promise((resolve, reject) => {
         commit('requete_auth')
-        axios({ url: '/session', data: user, method: 'POST' })
+        axios.post('/session', user)
           .then(resp => {
             const token = resp.data.token
             const username = resp.data.username
@@ -102,6 +102,7 @@ export default new Vuex.Store({
               username: username  
             })
             console.log(resp.token)
+            
             resolve(resp)
           })
           .catch(err => {

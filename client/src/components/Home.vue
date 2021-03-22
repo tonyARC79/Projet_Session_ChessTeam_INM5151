@@ -1,10 +1,15 @@
 <template>
   <div>
     <h3 v-if="username">
-      Bonjour {{ username }} ! Bienvenue sur ChessMess.com :)
+      Bonjour {{ username }} !
     </h3>
 
     <h3 v-if="!username">Désolé, vous n'êtes pas authentifié :(</h3>
+
+    
+
+    <img v-if="username" src="../images/fullLogoRed.png" width="25%" height="25%" alt="">
+
   </div>
 </template>
 
