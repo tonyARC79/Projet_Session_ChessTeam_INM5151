@@ -8,8 +8,10 @@ import { BootstrapVue, IconsPlugin } from 'bootstrap-vue'
 // Import Bootstrap an BootstrapVue CSS files (order is important)
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
+import 'vue-chessboard/dist/vue-chessboard.css'
 import './assets/friend.css';
 import './assets/tutorial.css';
+import './assets/chess.css';
 
 
 

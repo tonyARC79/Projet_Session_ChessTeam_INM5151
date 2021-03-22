@@ -1,4 +1,4 @@
-  <template>
+<template>
   <div>
     <h1>ChessMess Inscription</h1>
 
@@ -7,6 +7,7 @@
         <input
           type="text"
           name="username"
+          size="35"
           v-model="newUser.username"
           placeholder="nom utilisateur"
           id="email"
@@ -19,6 +20,7 @@
         <input
           type="email"
           name="email"
+          size="35"
           v-model="newUser.email"
           placeholder="courriel"
           id="pwd"
@@ -33,6 +35,7 @@
         <input
           type="password"
           name="password"
+          size="35"
           v-model="newUser.password"
           placeholder="mot de passe"
           id="pwd"
@@ -46,7 +49,8 @@
         <input
           type="password"
           name="password"
-          v-model="newUser.password2"
+          size="35"
+          v-model="password2"
           placeholder="validation mot de passe"
           id="pwd"
         />
@@ -57,6 +61,7 @@
       <div>
         <input
           type="number"
+          size="35"
           min="8"
           max="140"
           name="age"
@@ -75,7 +80,7 @@
   </div>
 </template>
 
-  <script>
+<script>
 export default {
   data: () => ({
     newUser: {
@@ -83,8 +88,8 @@ export default {
       email: null,
       age: null,
       password: null,
-      password2: null,
     },
+    password2: null,
     errors: {},
     formulaireValide: false,
   }),
@@ -107,7 +112,7 @@ export default {
       if (this.newUser.password && this.newUser.password.length < 7) {
         this.errors.password3 = "Le mot de passe est court";
       }
-      if (this.newUser.password !== this.newUser.password2) {
+      if (this.newUser.password !== this.password2) {
         this.errors.password2 = "Les mots de passes doivent être identique";
       }
       if (!this.newUser.age) {
