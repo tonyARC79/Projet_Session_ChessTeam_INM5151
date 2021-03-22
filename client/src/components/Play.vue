@@ -1,5 +1,7 @@
 <template>
-  <chessboard/>
+  <div class="chessboard-container">
+    <chessboard />
+  </div>
 </template>
 <script>
 import { chessboard } from "vue-chessboard";
