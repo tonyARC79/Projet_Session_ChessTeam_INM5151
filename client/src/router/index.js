@@ -51,8 +51,7 @@ let router = new Router({
         component: Play,
         meta: {
             title: 'play',
-            // pour desactiver pour developpement
-            // requiresAuth: true
+            requiresAuth: true
         }
     }
     ]
