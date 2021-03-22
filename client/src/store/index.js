@@ -14,6 +14,7 @@ export default new Vuex.Store({
   getters: {
     isAuthenticated: state => !!state.token,
     username: state => jwt_decode(state.token).username,
+    email: state => jwt_decode(state.token).email,
     authStatus: state => state.status,
   },
   mutations: {

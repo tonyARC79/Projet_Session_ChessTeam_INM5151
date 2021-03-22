@@ -44,6 +44,7 @@ let router = new Router({
         component: Profil,
         meta: {
             title: 'Inscription',
+            requiresAuth: true
         }
     },
     

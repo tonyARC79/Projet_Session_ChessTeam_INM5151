@@ -12,7 +12,7 @@
           </div>
           <div class="ml-3 w-100">
             <h1 class="mb-0 mt-0" v-if="username">{{username}}</h1>
-            <span >anthonyarcand79@gmail.com</span>
+            <span >{{email}}</span>
             <div
               class="p-2 mt-2 bg-primary d-flex justify-content-between rounded text-white stats"
             >
@@ -48,7 +48,7 @@ export default {
       return {
           name: '',
           username: store.getters.username,
-          email: '',
+          email: store.getters.email,
           age: null
 
       }
