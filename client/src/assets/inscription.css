@@ -1,0 +1,11 @@
+.inscription-form {
+  width: 40%;
+  margin: 3% auto 10vh auto;
+  text-align: center;
+}
+
+.inscription-title {
+  text-transform: uppercase;
+  margin-bottom: 30px;
+  font-size: 4rem;
+}
