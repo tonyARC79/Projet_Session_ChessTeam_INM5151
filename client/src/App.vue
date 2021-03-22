@@ -1,19 +1,38 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <Nav :isLoggedOn.sync="isLoggedOn"> </Nav>
+    <router-view></router-view>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
-
+import Nav from "@/components/Nav";
+import store from "./store";
 export default {
-  name: 'App',
+  name: "App",
   components: {
-    HelloWorld
-  }
-}
+    Nav,
+  },
+  data() {
+    return {
+      isLoggedOn: store.getters.isAuthenticated,
+    };
+  },
+  created: function () {
+    this.$http.interceptors.response.use(undefined,err => {
+      if (
+        err.response.status === 401 &&
+        err.config &&
+        !err.config.__isRetryRequest
+      ) {
+        this.$store.dispatch("logout").then(() => {
+          this.$router.push("/login");
+        });
+      }
+      return Promise.reject(err);
+    });
+  },
+};
 </script>
 
 <style>
@@ -23,6 +42,5 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
 }
 </style>
