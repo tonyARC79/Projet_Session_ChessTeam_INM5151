@@ -38,15 +38,20 @@
         </ul>
       </div>
     </nav>
-    <br />
+
   </div>
 </template>
 
 
 <script>
+import store from "../store";
 export default {
   name: "Nav",
-  props: ["username", "isLoggedOn"],
+  data() {
+    return {
+      isLoggedOn: store.getters.isAuthenticated,
+    }
+  },
   methods: {
     async handleClick() {
       this.$store.dispatch("logout").then(() => {

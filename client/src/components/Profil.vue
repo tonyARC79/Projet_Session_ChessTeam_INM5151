@@ -41,12 +41,13 @@
 </template>
 
 <script>
+import store from "../store";
 export default {
   name: "Profil",
-  props: ['username'],
   data() {
       return {
           name: '',
+          username: store.getters.username,
           email: '',
           age: null
 

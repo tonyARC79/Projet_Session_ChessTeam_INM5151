@@ -14,9 +14,14 @@
 </template>
 
 <script>
+import store from "../store";
 export default {
   name: "Home",
-  props: ["username"],
+  data() {
+    return {
+      username: store.getters.username,
+    };
+  },
 };
 
 //{"websocket":true,"origins":["*:*"],"cookie_needed":false,"entropy":1051744105}
