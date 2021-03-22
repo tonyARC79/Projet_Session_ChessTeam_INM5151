@@ -1,31 +1,39 @@
-<template>
-  <div>
-    <h1>ChessMess</h1>
-    <br />
-    <div>
-      <form @submit.prevent="login">
-        <span class="error text-danger">{{ errors.email }}</span><br>
-        <input
-          type="email"
-          name="name"
-          v-model="user.email"
-          placeholder="email"
-          id="email"
-        />
-        <br />
-        
-        <span class="error text-danger">{{ errors.password }}</span><br>
-        <input
-          type="password"
-          name="password"
-          v-model="user.password"
-          placeholder="password"
-          id="pwd"
-        />
-        <br /><br />
+<style>
+@import "../assets/inscription.css";
+</style>
 
-        <button type="submit" ref="#" v-on:click="validateForm">Login</button>
-        <span class="error text-danger">{{errors.invalide}}</span>
+<template>
+  <div class="login-container">
+    <h1 class="login-title">Connexion</h1>
+    <div class="login-form">
+      <form @submit.prevent="login">
+        <div class="mt-4">
+          <span class="error text-danger" v:show="errorEmail">{{ errorEmail }}</span>
+          <b-form-input
+            v-model="user.email"
+            size="15"
+            type="email"
+            name="email"
+            placeholder="Entrer un courriel"
+          ></b-form-input>
+        </div>
+
+        <div class="mt-4">
+          <span class="error text-danger"  v:show="errorPassword">{{ errorPassword }}</span>
+          <b-form-input
+            id="pwd"
+            v-model="user.password"
+            size="15"
+            type="password"
+            name="password"
+            placeholder="Entrer un mot de passe"
+          ></b-form-input>
+        </div>
+        <div class="mt-4 mb-4">
+          <b-button ref="" type="submit" v-on:click="validateForm"
+            >Connexion</b-button
+          >
+        </div>
       </form>
     </div>
   </div>
@@ -39,52 +47,44 @@ export default {
       email: null,
       password: null,
     },
-    errors: {},
+    errorEmail: null,
+    errorPassword: null,
     formulaireValide: false,
   }),
   methods: {
     validateForm() {
-      this.errors = {};
-      console.log("testing");
-
+      this.formulaireValide = false;
+      this.errorEmail = null
+      this.errorPassword = null
       if (!this.user.email) {
-        this.errors.email = "Le courriel est obligatoire";
+        this.errorEmail = "Le courriel est obligatoire";
       }
 
       if (!this.user.password) {
-        this.errors.password = "Le mot de passe est obligatoire";
+        this.errorPassword = "Le mot de passe est obligatoire";
       }
 
-      if (Object.keys(this.errors).length === 0) {
+      if (!this.errorEmail || !this.errorPassword) {
         this.formulaireValide = true;
       }
     },
     login() {
       this.errors = {};
       if (this.formulaireValide) {
-      this.$store
-        .dispatch("login", {
-          email: this.user.email,
-          password: this.user.password,
-        }).then(() => {
+        this.$store
+          .dispatch("login", {
+            email: this.user.email,
+            password: this.user.password,
+          })
+          .then(() => {
             this.$router.replace("/home");
           })
-        .catch((error) => {
-          this.formulaireValide = false;
-          console.log(error)
-          this.errors.invalide = 'courriel ou mot de passe invalide';
-          alert('courriel ou mot de passe invalide')
-
-        });
-
-      //this.$router.go(1);
-      
+          .catch(() => {
+            this.formulaireValide = false;
+            this.errorEmail = "courriel ou mot de passe invalide";
+          });
       }
     },
-    
   },
 };
 </script>
-
-<style scoped>
-</style>
