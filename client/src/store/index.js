@@ -24,7 +24,7 @@ export default new Vuex.Store({
     requete_auth(state) {
       state.status = 'chargement'
     },
-    auth_success(state, payload){
+    auth_success(state, payload) {
       state.status = 'success'
       state.token = payload.token
       state.username = payload.username
@@ -100,10 +100,10 @@ export default new Vuex.Store({
             commit({
               type: 'auth_success',
               token: token,
-              username: username  
+              username: username
             })
             console.log(resp.token)
-            
+
             resolve(resp)
           })
           .catch(err => {
@@ -120,7 +120,19 @@ export default new Vuex.Store({
         delete axios.defaults.headers.common['Authorization']
         resolve()
       })
-    }
+    },
+    validUsername({ commit }, searchQuery) {
+      commit('requete_auth')
+      return new Promise((resolve, reject) => {
+        axios.get('/api/user/valid?username=' + searchQuery)
+          .then(resp => {
+            resolve(resp.data)
+          })
+          .catch(err => {
+            reject(err)
+          })
+      })
+    },
   },
   modules: {}
 })

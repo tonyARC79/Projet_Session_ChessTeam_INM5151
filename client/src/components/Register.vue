@@ -11,8 +11,12 @@
     <form @submit.prevent="join">
       <div class="inscription-input">
         <span class="error text-danger">{{ errors.name }}</span>
+        <div v-if="invalidUsername" class="mb-2">
+          <span class="error text-danger">{{ invalidUsername }}</span>
+        </div>
         <b-form-input
           v-model="newUser.username"
+          v-on:keyup="isUsernameValid"
           size="15"
           type="text"
           name="username"
@@ -21,7 +25,7 @@
       </div>
       <div class="mt-4">
         <div v-if="emailInUse" class="mb-2">
-        <span  class="error text-danger ">Courriel déjà en utilisation</span>
+          <span class="error text-danger">Courriel déjà en utilisation</span>
         </div>
         <span class="error text-danger">{{ errors.emailError }}</span>
         <b-form-input
@@ -72,7 +76,7 @@
   </div>
 </template>
 
-<script scoped>
+<script>
 export default {
   data: () => ({
     newUser: {
@@ -84,9 +88,30 @@ export default {
     confirmPassword: null,
     errors: {},
     emailInUse: false,
+    invalidUsername: false,
     formulaireValide: false,
   }),
   methods: {
+    isUsernameValid() {
+      let username = this.newUser.username;
+      if (username !== "") {
+        this.$store
+          .dispatch("validUsername", username)
+          .then((res) => {
+            let isValid = res.valid;
+            if (!isValid) {
+              this.invalidUsername = res.message;
+            }
+          })
+          .catch((err) => {
+            console.log(err);
+            this.errors.name = "Erreur avec le serveur";
+          });
+      }
+      else {
+        this.invalidUsername = ""
+      }
+    },
     register() {
       this.emailInUse = false;
       this.errors = {};
