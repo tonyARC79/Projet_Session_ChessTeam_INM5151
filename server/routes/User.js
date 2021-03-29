@@ -93,26 +93,54 @@ app.get("/profil", authorized(), cors(), async (req, res) => {
 app.get("/me/friends", authorized(), cors(), async (req, res) => {
   let userID = jwt.decode(req.get("Authorization").split(" ")[1]);
   userID = userID.id;
+  /**
+  * FIXME: ceci retourne seulement les utilisateurs qui ils ont toi-même comme ami et non le contraire.
+  * Ex: Antoine ajoute Maxime comme ami. Si Maxime n'est pas ami avec Antoine dans la database, alors on ne le retrouvera pas dans la liste.
+  * Cependant , si Maxime ajoute Antoine comme ami dans la database. Alors, Antoine va voir Maxime dans sa liste d'ami.
+  */
   models.user.findOne({
     attributes: ['username'],
-    where: {
-      user_id: userID
-    },
     include: [{
       model: models.user,
       as: 'Relating',
       attributes: ['username'],
       through: { attributes: [] },
+      include: {
+        model: models.relationship,
+        as: 'relationship_relating',
+        attributes: ['type_fk'],
+        where: {
+          type_fk: 1
+        }
+      }
     }],
+    where: {
+      user_id: userID,
+    },
   })
     .then(users => {
-      res.json(users)
+      res.json(formatFriendJSON(users))
     })
     .catch(err => {
       console.log(err)
       res.status(500).json({ error: "Server Error" })
     });
 });
+
+
+function formatFriendJSON(user) {
+  let friends = []
+  for (const relatingFriends of user.Relating) {
+    friends.push({
+          "username": relatingFriends.username,
+      })
+    }
+  json = {
+    "username": user.username,
+    "friends": friends
+  }
+  return json
+}
 
 
 module.exports = app;

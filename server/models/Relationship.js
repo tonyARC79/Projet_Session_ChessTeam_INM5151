@@ -26,7 +26,14 @@ module.exports = (sequelize, DataTypes) => {
         name: 'type_fk',
         allowNull: false
       }
-    });
+    }),
+      Relationship.belongsTo(models.user, {
+        as: 'relating_user',
+        foreignKey: {
+          name: 'relating_user_fk',
+          allowNull: false
+        }
+      })
   };
 
   return Relationship;

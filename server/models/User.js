@@ -50,7 +50,14 @@ module.exports = (sequelize, DataTypes) => {
           as: 'Relating',
           through: models.relationship,
           foreignKey: 'relating_user_fk',
-        });
+        }),
+      User.hasMany(models.relationship, {
+        as: 'relationship_relating',
+        foreignKey: {
+          name: 'relating_user_fk',
+          allowNull: false
+        }
+      });
   };
   return User;
 };
