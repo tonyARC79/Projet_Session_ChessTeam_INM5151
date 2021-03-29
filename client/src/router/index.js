@@ -39,11 +39,11 @@ let router = new Router({
         }
     },
     {
-        path: '/user/view_profile',
+        path: '/user/me',
         name: 'viewProfile',
         component: Profil,
         meta: {
-            title: 'Inscription',
+            title: 'Profile',
             requiresAuth: true
         }
     },
