@@ -1,0 +1,30 @@
+.inscription-form {
+  width: 40%;
+  margin: 3% auto 10vh auto;
+  text-align: center;
+}
+
+.inscription-title {
+  text-transform: uppercase;
+  margin-bottom: 30px;
+  font-size: 4rem;
+}
+
+.login-container {
+  border-style: solid;
+  border-color: #000000;
+  border-width: 2px;
+  border-radius: 40px;
+  width: 40%;
+  margin: 10vh auto 10vh auto;
+  text-align: center;
+}
+
+.login-title {
+  margin: 3% auto 3% auto;
+}
+
+.login-form {
+  width: 70%;
+  margin: 0 auto;
+}

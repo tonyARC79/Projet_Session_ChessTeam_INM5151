@@ -1,7 +1,7 @@
 <template>
   <div id="app">
-    <Nav :isLoggedOn="isLoggedOn"> </Nav>
-    <router-view :username="username"></router-view>
+    <Nav :isLoggedOn.sync="isLoggedOn"> </Nav>
+    <router-view></router-view>
   </div>
 </template>
 
@@ -15,20 +15,21 @@ export default {
   },
   data() {
     return {
-      username: store.getters.username,
       isLoggedOn: store.getters.isAuthenticated,
     };
   },
   created: function () {
-    this.$http.interceptors.response.use(undefined, function (err) {
-      return new Promise(function () {
-        if (err.status === 401 && err.config && !err.config.__isRetryRequest) {
-          this.$store.dispatch("logout").then(() => {
-            this.$router.push("/login");
-          });
-        }
-        throw err;
-      });
+    this.$http.interceptors.response.use(undefined,err => {
+      if (
+        err.response.status === 401 &&
+        err.config &&
+        !err.config.__isRetryRequest
+      ) {
+        this.$store.dispatch("logout").then(() => {
+          this.$router.push("/login");
+        });
+      }
+      return Promise.reject(err);
     });
   },
 };

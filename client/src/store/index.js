@@ -14,6 +14,7 @@ export default new Vuex.Store({
   getters: {
     isAuthenticated: state => !!state.token,
     username: state => jwt_decode(state.token).username,
+    email: state => jwt_decode(state.token).email,
     authStatus: state => state.status,
   },
   mutations: {
@@ -23,7 +24,7 @@ export default new Vuex.Store({
     requete_auth(state) {
       state.status = 'chargement'
     },
-    auth_success(state, payload){
+    auth_success(state, payload) {
       state.status = 'success'
       state.token = payload.token
       state.username = payload.username
@@ -69,10 +70,28 @@ export default new Vuex.Store({
           })
       })
     },
+    loadProfile({ commit }, searchQuery) {
+      return new Promise((resolve, reject) => {
+        commit('requete_auth')
+        //console.log(localStorage.getItem('token'))
+        axios.get('/api/profil?email=' + searchQuery,
+          {
+            headers:
+              { "Authorization": 'Bearer ' + localStorage.getItem('token') }
+          })
+          .then(resp => {
+            resolve(resp.data)
+          })
+          .catch(err => {
+            commit('auth_erreur', err)
+            reject(err)
+          })
+      })
+    },
     login({ commit }, user) {
       return new Promise((resolve, reject) => {
         commit('requete_auth')
-        axios({ url: '/session', data: user, method: 'POST' })
+        axios.post('/session', user)
           .then(resp => {
             const token = resp.data.token
             const username = resp.data.username
@@ -83,6 +102,8 @@ export default new Vuex.Store({
               token: token,
               username: username
             })
+            console.log(resp.token)
+
             resolve(resp)
           })
           .catch(err => {
@@ -99,7 +120,19 @@ export default new Vuex.Store({
         delete axios.defaults.headers.common['Authorization']
         resolve()
       })
-    }
+    },
+    validUsername({ commit }, searchQuery) {
+      commit('requete_auth')
+      return new Promise((resolve, reject) => {
+        axios.get('/api/user/valid?username=' + searchQuery)
+          .then(resp => {
+            resolve(resp.data)
+          })
+          .catch(err => {
+            reject(err)
+          })
+      })
+    },
   },
   modules: {}
 })

@@ -5,6 +5,9 @@ import Login from '@/components/Login'
 import Register from '@/components/Register'
 import FindFriends from '@/components/Friend/FriendSearch'
 import Home from '@/components/Home'
+import Profil from '@/components/Profil'
+import Play from '@/components/Play'
+import Tutorial from '@/components/Tutorial/Tutorial.vue'
 Vue.use(Router)
 
 let router = new Router({
@@ -36,6 +39,16 @@ let router = new Router({
         }
     },
     {
+        path: '/user/view_profile',
+        name: 'viewProfile',
+        component: Profil,
+        meta: {
+            title: 'Inscription',
+            requiresAuth: true
+        }
+    },
+    
+    {
         path: '/friends/find',
         name: 'find friends',
         component: FindFriends,
@@ -43,21 +56,39 @@ let router = new Router({
             title: 'Find friends',
             requiresAuth: true
         }
+    },
+    {
+        path: '/play',
+        name: 'play',
+        component: Play,
+        meta: {
+            title: 'play',
+            requiresAuth: true
+        },
+    },
+    {
+        path: '/tutorial',
+        name: 'Tutorial',
+        component: Tutorial,
+        meta: {
+            title: 'Tutorial',
+            requiresAuth: true
+        }
     }
     ]
 });
 
 router.beforeEach((to, from, next) => {
-    if(to.matched.some(record => record.meta.requiresAuth)) {
+    if (to.matched.some(record => record.meta.requiresAuth)) {
         if (store.getters.isAuthenticated) {
-          next()
-          return
+            next()
+            return
         }
         // TODO: rediriger vers la page de non authorisation
         next('/login')
-      } else {
+    } else {
         next()
-      }
+    }
 })
 
 export default router

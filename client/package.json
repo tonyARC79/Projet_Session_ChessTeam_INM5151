@@ -1,5 +1,5 @@
 {
-  "name": "hello-world",
+  "name": "Chessmess",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -15,6 +15,7 @@
     "qs": "^6.9.6",
     "vue": "^2.6.11",
     "vue-axios": "^3.2.4",
+    "vue-chessboard": "^0.6.7",
     "vue-router": "^3.4.6",
     "vuex": "^3.5.1"
   },
