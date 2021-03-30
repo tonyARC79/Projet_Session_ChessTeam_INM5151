@@ -29,12 +29,13 @@ app.get("/user/valid", cors(), async (req, res) => {
 });
 
 app.get("/users", authorized(), cors(), async (req, res) => {
+  let token = jwt.decode(req.get("Authorization").split(" ")[1]);
+  let userID = token.id;
   let username = decodeURI(req.query.username);
   if (username == "") {
     return res.json([])
   }
-
-  models.user.findAll({
+  let users = await models.user.findAll({
     attributes: ['username'],
     limit: 5,
     where: {
@@ -44,12 +45,17 @@ app.get("/users", authorized(), cors(), async (req, res) => {
     }
   })
     .then(users => {
-      res.json(users)
+      return users;
     })
     .catch(err => {
       console.log(err)
       res.status(500).json({ error: "Server Error" })
     });
+
+    
+    let friends = await getFriends(userID);
+    let filteredUsers = filterUserByFriends(users, friends);
+    res.json(filteredUsers)
 });
 
 app.get("/user", authorized(), cors(), async (req, res) => {
@@ -93,21 +99,43 @@ app.get("/profil", authorized(), cors(), async (req, res) => {
 app.get("/me/friends", authorized(), cors(), async (req, res) => {
   let userID = jwt.decode(req.get("Authorization").split(" ")[1]);
   userID = userID.id;
-  /**
-  * FIXME: ceci retourne seulement les utilisateurs qui ils ont toi-même comme ami et non le contraire.
-  * Ex: Antoine ajoute Maxime comme ami. Si Maxime n'est pas ami avec Antoine dans la database, alors on ne le retrouvera pas dans la liste.
-  * Cependant , si Maxime ajoute Antoine comme ami dans la database. Alors, Antoine va voir Maxime dans sa liste d'ami.
-  */
-  models.user.findOne({
+  try {
+    let friends = await getFriends(userID);
+    res.json(friends)
+
+  }
+  catch(err) {
+    console.log(err)
+    res.status(500).json({ error: "Server Error" })
+  }
+});
+
+function filterUserByFriends(users, friends) {
+  let filteredUsers = []
+  let allFriends = []
+  for (const friend of friends) {
+    allFriends.push(friend.username);
+  }
+  for(const user of users) {
+    let username = user.username;
+    if(!allFriends.includes(username)) {
+      filteredUsers.push(user);
+    }
+  }
+  return filteredUsers;
+}
+
+async function getFriends(userID) {
+  return await models.user.findOne({
     attributes: ['username'],
     include: [{
       model: models.user,
       as: 'Relating',
-      attributes: ['username'],
+      attributes: ['username', 'user_id'],
       through: { attributes: [] },
       include: {
         model: models.relationship,
-        as: 'relationship_relating',
+        as: 'relationship_related',
         attributes: ['type_fk'],
         where: {
           type_fk: 1
@@ -117,29 +145,23 @@ app.get("/me/friends", authorized(), cors(), async (req, res) => {
     where: {
       user_id: userID,
     },
+  }).then(users => {
+    return formatFriendJSON(users);
   })
-    .then(users => {
-      res.json(formatFriendJSON(users))
-    })
-    .catch(err => {
-      console.log(err)
-      res.status(500).json({ error: "Server Error" })
-    });
-});
+  .catch(err => {
+    throw new Error(err)
+  });
+}
 
 
 function formatFriendJSON(user) {
   let friends = []
   for (const relatingFriends of user.Relating) {
     friends.push({
-          "username": relatingFriends.username,
-      })
-    }
-  json = {
-    "username": user.username,
-    "friends": friends
+      "username": relatingFriends.username,
+    })
   }
-  return json
+  return friends
 }
 
 

@@ -52,9 +52,9 @@ module.exports = (sequelize, DataTypes) => {
           foreignKey: 'relating_user_fk',
         }),
       User.hasMany(models.relationship, {
-        as: 'relationship_relating',
+        as: 'relationship_related',
         foreignKey: {
-          name: 'relating_user_fk',
+          name: 'related_user_fk',
           allowNull: false
         }
       });

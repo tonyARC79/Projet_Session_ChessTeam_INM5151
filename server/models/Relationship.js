@@ -1,10 +1,10 @@
 module.exports = (sequelize, DataTypes) => {
   const Relationship = sequelize.define('relationship', {
-    related_relationship_fk: {
+    related_user_fk: {
       type: DataTypes.INTEGER,
       allowNull: false
     },
-    relating_relationship_fk: {
+    relating_user_fk: {
       type: DataTypes.INTEGER,
       allowNull: false
     },
@@ -31,6 +31,14 @@ module.exports = (sequelize, DataTypes) => {
         as: 'relating_user',
         foreignKey: {
           name: 'relating_user_fk',
+          allowNull: false
+        }
+      }),
+
+      Relationship.belongsTo(models.user, {
+        as: 'related_user',
+        foreignKey: {
+          name: 'related_user_fk',
           allowNull: false
         }
       })
