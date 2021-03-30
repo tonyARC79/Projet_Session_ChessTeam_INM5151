@@ -22,7 +22,7 @@
       <div class="collapse navbar-collapse" id="navbarNavDropdown">
         <ul class="navbar-nav mr-auto">
           <li class="nav-item">
-            <router-link class="nav-link" to="/user/view_profile"
+            <router-link class="nav-link" to="/user/me"
               >Profil</router-link
             >
           </li>

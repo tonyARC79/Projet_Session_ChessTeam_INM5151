@@ -133,6 +133,20 @@ export default new Vuex.Store({
           })
       })
     },
+    getFriends() {
+      return new Promise((resolve, reject) => {
+        axios.get('/api/me/friends', {
+          headers:
+            { "Authorization": 'Bearer ' + localStorage.getItem('token') }
+        })
+          .then(resp => {
+            resolve(resp.data)
+          })
+          .catch(err => {
+            reject(err)
+          })
+      })
+    },
   },
   modules: {}
 })

@@ -4,6 +4,7 @@ import store from '../store'
 import Login from '@/components/Login'
 import Register from '@/components/Register'
 import FindFriends from '@/components/Friend/FriendSearch'
+import Friends from '@/components/Friend/Friends'
 import Home from '@/components/Home'
 import Profil from '@/components/Profil'
 import Play from '@/components/Play'
@@ -47,13 +48,22 @@ let router = new Router({
             requiresAuth: true
         }
     },
-    
+
     {
         path: '/friends/find',
         name: 'find friends',
         component: FindFriends,
         meta: {
             title: 'Find friends',
+            requiresAuth: true
+        }
+    },
+    {
+        path: '/friends',
+        name: 'friends',
+        component: Friends,
+        meta: {
+            title: 'Amis',
             requiresAuth: true
         }
     },
