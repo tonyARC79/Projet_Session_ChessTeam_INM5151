@@ -102,7 +102,6 @@ export default new Vuex.Store({
               token: token,
               username: username
             })
-            console.log(resp.token)
 
             resolve(resp)
           })

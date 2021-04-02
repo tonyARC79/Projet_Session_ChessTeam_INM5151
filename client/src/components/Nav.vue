@@ -21,43 +21,39 @@
       </button>
       <div class="collapse navbar-collapse" id="navbarNavDropdown">
         <ul class="navbar-nav mr-auto">
-          <li class="nav-item">
-            <router-link class="nav-link" to="/user/me"
-              >Profil</router-link
-            >
+          <li v-if="isAuthenticated" class="nav-item">
+            <router-link class="nav-link" to="/user/me">Profil</router-link>
           </li>
-          <li v-if="isLoggedOn" class="nav-item">
+          <li v-if="isAuthenticated" class="nav-item">
             <a class="nav-link" href="" @click="handleClick">Logout</a>
           </li>
-          <li v-if="!isLoggedOn" class="nav-item">
+          <li v-if="!isAuthenticated" class="nav-item">
             <router-link class="nav-link" to="/login">Login</router-link>
           </li>
-          <li v-if="!isLoggedOn" class="nav-item">
+          <li v-if="!isAuthenticated" class="nav-item">
             <router-link class="nav-link" to="/join">Inscription </router-link>
           </li>
         </ul>
       </div>
     </nav>
-
   </div>
 </template>
 
 
 <script>
-import store from "../store";
+import { mapGetters  } from "vuex";
 export default {
   name: "Nav",
+  computed: {
+    ...mapGetters(['isAuthenticated']) 
+  },
   data() {
-    return {
-      isLoggedOn: store.getters.isAuthenticated,
-    }
+    return {};
   },
   methods: {
     async handleClick() {
-      this.$store.dispatch("logout").then(() => {
-        
-      });
+      this.$store.dispatch("logout").then(() => {});
     },
-  }
+  },
 };
 </script>
