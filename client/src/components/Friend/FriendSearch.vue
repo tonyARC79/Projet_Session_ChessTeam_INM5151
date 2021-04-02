@@ -29,24 +29,41 @@
             :key="item.username"
           >
             <div class="d-flex w-100 justify-content-between">
-              <b-icon icon="person-fill" aria-hidden="true"></b-icon>
+              <b-icon
+                class="h1 mt-2 ml-1"
+                icon="person-fill"
+                aria-hidden="true"
+              ></b-icon>
+              <div>
+                <p class="mb-1">{{ item.username }}</p>
+                <small>Rejoint le : {{ item.date_registered | moment }}</small>
+              </div>
+              <b-button size="sm" variant="primary" class="mb-2">
+                Ajouter comme ami
+              </b-button>
             </div>
-            <p class="mb-1">{{ item.username }}</p>
-            <small>date register</small>
           </a>
-            <p v-if="noResult">Aucun utilisateur ne correspond à votre recherche</p>
+          <p v-if="noResult">
+            Aucun utilisateur ne correspond à votre recherche
+          </p>
         </div>
       </div>
     </div>
   </div>
 </template>
 <script>
+import moment from 'moment'
 export default {
   data: () => ({
     lesUtilisateurs: [],
     searchQuery: "",
     noResult: false,
   }),
+  filters: {
+    moment: function (date) {
+      return moment(date).format("MMMM Do YYYY");
+    },
+  },
   methods: {
     findFriends() {
       this.$store

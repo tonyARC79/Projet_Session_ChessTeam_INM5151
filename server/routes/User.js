@@ -36,7 +36,7 @@ app.get("/users", authorized(), cors(), async (req, res) => {
     return res.json([])
   }
   let users = await models.user.findAll({
-    attributes: ['username'],
+    attributes: ['username', 'date_registered'],
     limit: 5,
     where: {
       username: {
