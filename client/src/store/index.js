@@ -146,6 +146,24 @@ export default new Vuex.Store({
           })
       })
     },
+    sendFriendRequest(_, usernameQuery) {
+      return new Promise((resolve, reject) => {
+        axios.post('/api/friend/request', {
+          username: usernameQuery
+        },
+          {
+            headers: {
+              Authorization: 'Bearer ' + localStorage.getItem('token')
+            }
+          })
+          .then(resp => {
+            resolve(resp)
+          })
+          .catch(err => {
+            reject(err)
+          })
+      })
+    },
   },
   modules: {}
 })

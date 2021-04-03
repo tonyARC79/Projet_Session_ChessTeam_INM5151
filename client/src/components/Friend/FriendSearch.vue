@@ -38,7 +38,12 @@
                 <p class="mb-1">{{ item.username }}</p>
                 <small>Rejoint le : {{ item.date_registered | moment }}</small>
               </div>
-              <b-button size="sm" variant="primary" class="mb-2">
+              <b-button
+                size="sm"
+                variant="primary"
+                class="mb-2"
+                v-on:click="sendFriendRequest(item.username)"
+              >
                 Ajouter comme ami
               </b-button>
             </div>
@@ -52,11 +57,12 @@
   </div>
 </template>
 <script>
-import moment from 'moment'
+import moment from "moment";
 export default {
   data: () => ({
     lesUtilisateurs: [],
     searchQuery: "",
+
     noResult: false,
   }),
   filters: {
@@ -79,6 +85,30 @@ export default {
         .catch((error) => {
           console.log(error);
         });
+    },
+    sendFriendRequest(username) {
+      this.$store
+        .dispatch("sendFriendRequest", username)
+        .then((resp) => {
+          if (resp.status == 201) {
+            this.makeToast(`Requête d'ami envoyée à ${username}`)
+            this.lesUtilisateurs = [];
+          } else {
+            // erreur
+            this.noResult = false;
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+    makeToast(message) {
+      this.$bvToast.toast(message, {
+        title: "Requête d'ami envoyée",
+        autoHideDelay: 5000,
+        appendToast: true,
+        toaster: 'b-toaster-top-center',
+      });
     },
   },
 };
