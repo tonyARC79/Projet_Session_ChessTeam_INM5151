@@ -5,6 +5,7 @@ import Login from '@/components/Login'
 import Register from '@/components/Register'
 import FindFriends from '@/components/Friend/FriendSearch'
 import Friends from '@/components/Friend/Friends'
+import FriendRequest from '@/components/Friend/FriendRequest'
 import Home from '@/components/Home'
 import Profil from '@/components/Profil'
 import Play from '@/components/Play'
@@ -64,6 +65,15 @@ let router = new Router({
         component: Friends,
         meta: {
             title: 'Amis',
+            requiresAuth: true
+        }
+    },
+    {
+        path: '/friends/requests',
+        name: 'friend request',
+        component: FriendRequest,
+        meta: {
+            title: 'Requête d\'ami',
             requiresAuth: true
         }
     },

@@ -164,6 +164,40 @@ export default new Vuex.Store({
           })
       })
     },
+    getFriendsRequests() {
+      return new Promise((resolve, reject) => {
+        axios.get('/api/me/requests',
+          {
+            headers: {
+              Authorization: 'Bearer ' + localStorage.getItem('token')
+            }
+          })
+          .then(resp => {
+            resolve(resp.data)
+          })
+          .catch(err => {
+            reject(err)
+          })
+      })
+    },
+    accepterDemandeAmi(_, usernameQuery) {
+      return new Promise((resolve, reject) => {
+        axios.post('/api/friend', {
+          username: usernameQuery
+        },
+          {
+            headers: {
+              Authorization: 'Bearer ' + localStorage.getItem('token')
+            }
+          })
+          .then(resp => {
+            resolve(resp)
+          })
+          .catch(err => {
+            reject(err)
+          })
+      })
+    },
   },
   modules: {}
 })
