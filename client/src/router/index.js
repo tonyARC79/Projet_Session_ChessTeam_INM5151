@@ -8,6 +8,8 @@ import Home from '@/components/Home'
 import Profil from '@/components/Profil'
 import Play from '@/components/Play'
 import Tutorial from '@/components/Tutorial/Tutorial.vue'
+import Move from '@/components/Tutorial/Move.vue'
+
 Vue.use(Router)
 
 let router = new Router({
@@ -74,7 +76,16 @@ let router = new Router({
             title: 'Tutorial',
             requiresAuth: true
         }
+    },
+    {
+        path: '/move',
+        name: 'Move',
+        component: Move,
+        meta: {
+            title: 'Bouger piece',
+        }
     }
+
     ]
 });
 

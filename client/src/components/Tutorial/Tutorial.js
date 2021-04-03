@@ -10,7 +10,7 @@ const tutorials = [
   new Tutorial(
     'Comment bouger ces pièces',
     'Apprendre à connaître les diffèrentes pièces des échecs',
-    'localhost:3000',
+    'localhost:8080/move',
     'https://vuejs.org//images/logo.png'
   ),
   new Tutorial(
