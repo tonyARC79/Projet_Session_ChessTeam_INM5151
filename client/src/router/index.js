@@ -9,6 +9,7 @@ import Profil from '@/components/Profil'
 import Play from '@/components/Play'
 import Tutorial from '@/components/Tutorial/Tutorial.vue'
 import Move from '@/components/Tutorial/Move.vue'
+import Rules from '@/components/Tutorial/Rules.vue'
 
 Vue.use(Router)
 
@@ -82,10 +83,17 @@ let router = new Router({
         name: 'Move',
         component: Move,
         meta: {
-            title: 'Bouger piece',
+            title: 'BougerPiece',
+        }
+    },
+    {
+        path: '/rules',
+        name: 'rules',
+        component: Rules,
+        meta: {
+            title: 'regle',
         }
     }
-
     ]
 });
 

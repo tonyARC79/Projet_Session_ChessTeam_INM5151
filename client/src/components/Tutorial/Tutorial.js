@@ -16,7 +16,7 @@ const tutorials = [
   new Tutorial(
     'Jouer une partie d\'échecs',
     'Apprendre les diffèrents règlements des échecs',
-    'localhost:3000',
+    'localhost:8080/rules',
     'https://daynin.github.io/clojurescript-presentation/img/react-logo.png'
   ),
   new Tutorial(

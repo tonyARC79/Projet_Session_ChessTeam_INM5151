@@ -1,12 +1,12 @@
 <script>
 import { chessboard }  from 'vue-chessboard'
 export default {
-  name: 'bishopTutorial',
+  name: 'pawnCaptureTutorial',
   extends: chessboard,
   methods: {
     userPlay() {
       return (orig, dest) => {
-        this.retourMove = this.game.move({from: orig, to: dest}) // pas de promotion de possible
+        this.game.move({from: orig, to: dest}) // pas de promotion de possible
         this.board.set({
           fen: this.game.fen()
         })
@@ -14,10 +14,7 @@ export default {
       };
     },
     aiNextMove() {
-      let moves = this.game.moves({verbose: true})
-      let randomMove = moves[Math.floor(Math.random() * moves.length)]
-      this.game.move(randomMove)
-
+      this.game.move({from: 'c8', to: 'b6'})
       this.board.set({
         fen: this.game.fen(),
         turnColor: this.toColor(),
@@ -35,8 +32,7 @@ export default {
     })
   },
   created(){
-    this.game.load("B7/8/8/2B5/8/8/8/k7 w - - 0 1");
+    this.game.load("2n5/8/p7/P4p2/4P3/8/8/8 w - - 0 1");
   },
 }
 </script>
-
