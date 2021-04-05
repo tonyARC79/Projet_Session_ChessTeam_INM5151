@@ -89,7 +89,7 @@ import drawGameTutorial from './TutorialRules/DrawGameTutorial.vue'
 import checkTutorial from './TutorialRules/CheckTutorial.vue'
 
 export default {
-  name: 'app',
+  name: 'rules',
   components: {
     chessboard,
     castlingTutorial,
@@ -97,6 +97,11 @@ export default {
     enPassantTutorial,
     drawGameTutorial,
     checkTutorial,
+  },
+  data () {
+    return {
+      currentFen: '',
+    }
   },
   methods: {
     loadFen(fen) {

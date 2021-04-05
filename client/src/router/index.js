@@ -10,6 +10,7 @@ import Play from '@/components/Play'
 import Tutorial from '@/components/Tutorial/Tutorial.vue'
 import Move from '@/components/Tutorial/Move.vue'
 import Rules from '@/components/Tutorial/Rules.vue'
+import CheckMate from '@/components/Tutorial/CheckMate.vue'
 
 Vue.use(Router)
 
@@ -93,7 +94,16 @@ let router = new Router({
         meta: {
             title: 'regle',
         }
+    },
+    {
+        path: '/checkMate',
+        name: 'chekMate',
+        component: CheckMate,
+        meta: {
+            title: 'EchecEtMat',
+        }
     }
+
     ]
 });
 

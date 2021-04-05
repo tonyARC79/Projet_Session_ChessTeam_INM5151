@@ -22,7 +22,7 @@ const tutorials = [
   new Tutorial(
     'Gagner une partie d\'échec',
     'Apprendre les conditions pour pouvoir gagner dans une partie d\'échecs',
-    'localhost:3000',
+    'localhost:8080/checkMate',
     'https://angularjs.org/img/ng-logo.png'
   ),
 ]

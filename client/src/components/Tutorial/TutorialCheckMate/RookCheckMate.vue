@@ -1,13 +1,8 @@
 <script>
 import { chessboard }  from 'vue-chessboard'
 export default {
-  name: 'enPassantTutorial',
+  name: 'bishopTutorial',
   extends: chessboard,
-  data () {
-    return {
-      retourMove: null,
-    }
-  },
   methods: {
     userPlay() {
       return (orig, dest) => {
@@ -19,12 +14,15 @@ export default {
       };
     },
     aiNextMove() {
-      this.game.move({ from: 'b7', to: 'b5' })
+      let moves = this.game.moves({verbose: true})
+      let randomMove = moves[Math.floor(Math.random() * moves.length)]
+      this.game.move(randomMove)
+
       this.board.set({
         fen: this.game.fen(),
         turnColor: this.toColor(),
         movable: {
-color: this.toColor(),
+          color: this.toColor(),
           dests: this.possibleMoves(),
           events: { after: this.userPlay()},
         }
@@ -37,7 +35,7 @@ color: this.toColor(),
     })
   },
   created(){
-    this.game.load("4k3/1p6/8/8/P7/8/8/8 w - - 0 1");
+    this.game.load("R7/8/8/2R5/8/3k4/8/8 w - - 0 1");
   },
 }
 </script>

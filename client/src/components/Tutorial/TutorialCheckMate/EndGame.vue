@@ -1,30 +1,33 @@
 <script>
+//NE PAS EVALUER Copier coller de l'exemple fourni avec chessboard.vue
+//Le but est simplement de permettre au joueur de terminer sa partie.
 import { chessboard }  from 'vue-chessboard'
 export default {
-  name: 'enPassantTutorial',
+  name: 'newboard',
   extends: chessboard,
-  data () {
-    return {
-      retourMove: null,
-    }
-  },
   methods: {
     userPlay() {
       return (orig, dest) => {
-        this.game.move({from: orig, to: dest}) // pas de promotion de possible
+        if (this.isPromotion(orig, dest)) {
+          this.promoteTo = this.onPromotion()
+        }
+        this.game.move({from: orig, to: dest, promotion: this.promoteTo}) // promote to queen for simplicity
         this.board.set({
           fen: this.game.fen()
         })
+        this.calculatePromotions()
         this.aiNextMove()
       };
     },
     aiNextMove() {
-      this.game.move({ from: 'b7', to: 'b5' })
+      let moves = this.game.moves({verbose: true})
+      let randomMove = moves[Math.floor(Math.random() * moves.length)]
+      this.game.move(randomMove)
       this.board.set({
         fen: this.game.fen(),
         turnColor: this.toColor(),
         movable: {
-color: this.toColor(),
+          color: this.toColor(),
           dests: this.possibleMoves(),
           events: { after: this.userPlay()},
         }
@@ -35,10 +38,7 @@ color: this.toColor(),
     this.board.set({
       movable: { events: { after: this.userPlay()} },
     })
-  },
-  created(){
-    this.game.load("4k3/1p6/8/8/P7/8/8/8 w - - 0 1");
-  },
+  }
 }
 </script>
 
