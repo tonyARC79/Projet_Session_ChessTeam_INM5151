@@ -1,44 +1,44 @@
 <script>
-import { chessboard }  from 'vue-chessboard'
+import { chessboard } from "vue-chessboard";
 export default {
-  name: 'enPassantTutorial',
+  name: "enPassantTutorial",
   extends: chessboard,
-  data () {
+  data() {
     return {
       retourMove: null,
-    }
+    };
   },
   methods: {
     userPlay() {
       return (orig, dest) => {
-        this.game.move({from: orig, to: dest}) // pas de promotion de possible
+        this.game.move({ from: orig, to: dest }); // pas de promotion de possible
         this.board.set({
-          fen: this.game.fen()
-        })
-        this.aiNextMove()
+          fen: this.game.fen(),
+        });
+        this.aiNextMove();
       };
     },
     aiNextMove() {
-      this.game.move({ from: 'b7', to: 'b5' })
+      this.game.move({ from: "b7", to: "b5" });
       this.board.set({
         fen: this.game.fen(),
         turnColor: this.toColor(),
         movable: {
-color: this.toColor(),
+          color: this.toColor(),
           dests: this.possibleMoves(),
-          events: { after: this.userPlay()},
-        }
+          events: { after: this.userPlay() },
+        },
       });
     },
   },
   mounted() {
     this.board.set({
-      movable: { events: { after: this.userPlay()} },
-    })
+      movable: { events: { after: this.userPlay() } },
+    });
   },
-  created(){
+  created() {
     this.game.load("4k3/1p6/8/8/P7/8/8/8 w - - 0 1");
   },
-}
+};
 </script>
 
