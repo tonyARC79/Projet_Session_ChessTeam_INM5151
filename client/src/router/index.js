@@ -10,6 +10,10 @@ import Home from '@/components/Home'
 import Profil from '@/components/Profil'
 import Play from '@/components/Play'
 import Tutorial from '@/components/Tutorial/Tutorial.vue'
+import Move from '@/components/Tutorial/Move.vue'
+import Rules from '@/components/Tutorial/Rules.vue'
+import CheckMate from '@/components/Tutorial/CheckMate.vue'
+
 Vue.use(Router)
 
 let router = new Router({
@@ -94,7 +98,32 @@ let router = new Router({
             title: 'Tutorial',
             requiresAuth: true
         }
+    },
+    {
+        path: '/move',
+        name: 'Move',
+        component: Move,
+        meta: {
+            title: 'BougerPiece',
+        }
+    },
+    {
+        path: '/rules',
+        name: 'rules',
+        component: Rules,
+        meta: {
+            title: 'regle',
+        }
+    },
+    {
+        path: '/checkMate',
+        name: 'chekMate',
+        component: CheckMate,
+        meta: {
+            title: 'EchecEtMat',
+        }
     }
+
     ]
 });
 
