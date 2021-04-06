@@ -1,0 +1,35 @@
+.user-container {
+  display: grid;
+  flex: 1 0 auto;
+  gap: 20px;
+  width: 100%;
+  grid-template-columns: 60% 40%;
+}
+.user-profil {
+  grid-column: 1;
+}
+.user-friends-container {
+  grid-column: 2;
+}
+
+.friends-container {
+  
+  background-color: #F2F3F5;
+  border-radius: 15px;
+  width: 35%;
+}
+
+.friend-link {
+  border-radius: 15px;
+  color: #000000;
+  text-decoration: none;
+  cursor: pointer;
+  font-weight: 500;
+  font-size: 15px;
+}
+
+.friend-link:hover {
+  background-color: #E8EAED;
+  text-decoration: none;
+  color: black;
+}

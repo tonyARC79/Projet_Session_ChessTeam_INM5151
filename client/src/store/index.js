@@ -102,7 +102,6 @@ export default new Vuex.Store({
               token: token,
               username: username
             })
-            console.log(resp.token)
 
             resolve(resp)
           })
@@ -127,6 +126,72 @@ export default new Vuex.Store({
         axios.get('/api/user/valid?username=' + searchQuery)
           .then(resp => {
             resolve(resp.data)
+          })
+          .catch(err => {
+            reject(err)
+          })
+      })
+    },
+    getFriends() {
+      return new Promise((resolve, reject) => {
+        axios.get('/api/me/friends', {
+          headers:
+            { "Authorization": 'Bearer ' + localStorage.getItem('token') }
+        })
+          .then(resp => {
+            resolve(resp.data)
+          })
+          .catch(err => {
+            reject(err)
+          })
+      })
+    },
+    sendFriendRequest(_, usernameQuery) {
+      return new Promise((resolve, reject) => {
+        axios.post('/api/friend/request', {
+          username: usernameQuery
+        },
+          {
+            headers: {
+              Authorization: 'Bearer ' + localStorage.getItem('token')
+            }
+          })
+          .then(resp => {
+            resolve(resp)
+          })
+          .catch(err => {
+            reject(err)
+          })
+      })
+    },
+    getFriendsRequests() {
+      return new Promise((resolve, reject) => {
+        axios.get('/api/me/requests',
+          {
+            headers: {
+              Authorization: 'Bearer ' + localStorage.getItem('token')
+            }
+          })
+          .then(resp => {
+            resolve(resp.data)
+          })
+          .catch(err => {
+            reject(err)
+          })
+      })
+    },
+    accepterDemandeAmi(_, usernameQuery) {
+      return new Promise((resolve, reject) => {
+        axios.post('/api/friend', {
+          username: usernameQuery
+        },
+          {
+            headers: {
+              Authorization: 'Bearer ' + localStorage.getItem('token')
+            }
+          })
+          .then(resp => {
+            resolve(resp)
           })
           .catch(err => {
             reject(err)

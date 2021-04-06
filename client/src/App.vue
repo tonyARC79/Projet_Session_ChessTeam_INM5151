@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <Nav :isLoggedOn.sync="isLoggedOn"> </Nav>
+    <Nav/>
     <router-view></router-view>
   </div>
 </template>
@@ -26,6 +26,7 @@ export default {
         !err.config.__isRetryRequest
       ) {
         this.$store.dispatch("logout").then(() => {
+          this.isLoggedOn = false;
           this.$router.push("/login");
         });
       }
