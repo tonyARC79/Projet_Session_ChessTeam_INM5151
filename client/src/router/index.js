@@ -13,6 +13,7 @@ import Tutorial from '@/components/Tutorial/Tutorial.vue'
 import Move from '@/components/Tutorial/Move.vue'
 import Rules from '@/components/Tutorial/Rules.vue'
 import CheckMate from '@/components/Tutorial/CheckMate.vue'
+import Settings from '@/components/Settings.vue'
 
 Vue.use(Router)
 
@@ -50,6 +51,15 @@ let router = new Router({
         component: Profil,
         meta: {
             title: 'Profile',
+            requiresAuth: true
+        }
+    },
+    {
+        path: '/settings',
+        name: 'Settings',
+        component: Settings,
+        meta: {
+            title: 'Paramètres',
             requiresAuth: true
         }
     },

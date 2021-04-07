@@ -49,25 +49,59 @@
           <div class="w-100">
             <h4>Amis</h4>
             <b-link href="/friends" class="d-flex w-100 friend-link p-1">
-            <div class="h2 mb-0">
-              <b-icon icon="person-fill" scale="1"></b-icon>
-            </div>
-              <span class="ml-3 align-items-center d-inline-flex">Tes amis</span>
+              <div class="h2 mb-0">
+                <b-icon icon="person-fill" scale="1"></b-icon>
+              </div>
+              <span class="ml-3 align-items-center d-inline-flex"
+                >Tes amis</span
+              >
             </b-link>
             <b-link href="/friends/find" class="d-flex w-100 friend-link p-1">
-            <div class="h2 mb-0 ml-1">
-              <b-icon icon="person-plus-fill" scale="1"></b-icon>
-            </div>
-              <span class="ml-3 align-items-center d-inline-flex">Ajouter un ami</span>
+              <div class="h2 mb-0 ml-1">
+                <b-icon icon="person-plus-fill" scale="1"></b-icon>
+              </div>
+              <span class="ml-3 align-items-center d-inline-flex"
+                >Ajouter un ami</span
+              >
             </b-link>
-            <b-link href="/friends/requests" class="d-flex w-100 friend-link p-1">
-            <div class="h2 mb-0 ml-1">
-              <b-icon icon="envelope-fill" scale="1"></b-icon>
-            </div>
-              <span class="ml-3 align-items-center d-inline-flex">Invitation en attente</span>
+            <b-link
+              href="/friends/requests"
+              class="d-flex w-100 friend-link p-1"
+            >
+              <div class="h2 mb-0 ml-1">
+                <b-icon icon="envelope-fill" scale="1"></b-icon>
+              </div>
+              <span class="ml-3 align-items-center d-inline-flex"
+                >Invitation en attente</span
+              >
             </b-link>
           </div>
-          
+        </div>
+      </div>
+    </div>
+
+    <div class="user-friends-container">
+      <div class="container mt-5 d-flex justify-content-left">
+        <div class="d-flex align-items-center friends-container">
+          <div class="w-100">
+            <h4>Profil</h4>
+            <b-link href="/settings" class="d-flex w-100 friend-link p-1">
+              <div class="h2 mb-0">
+                <b-icon icon="gear-fill" scale="1"></b-icon>
+              </div>
+              <span class="ml-3 align-items-center d-inline-flex"
+                >Paramètres de compte</span
+              >
+            </b-link>
+            <b-link href="#" class="d-flex w-100 friend-link p-1">
+              <div class="h2 mb-0 ml-1">
+                <b-icon icon="trash-fill" scale="1"></b-icon>
+              </div>
+              <span class="ml-3 align-items-center d-inline-flex"
+                >Effacer compte</span
+              >
+            </b-link>
+          </div>
         </div>
       </div>
     </div>
