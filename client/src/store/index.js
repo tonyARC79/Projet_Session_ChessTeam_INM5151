@@ -198,6 +198,34 @@ export default new Vuex.Store({
           })
       })
     },
+    changeUserInformation({ commit }, info) {
+      return new Promise((resolve, reject) => {
+        commit('requete_auth')
+        axios.patch('/api/user', qs.stringify(info),
+          {
+            headers: {
+              Authorization: 'Bearer ' + localStorage.getItem('token')
+            }
+          })
+          .then(resp => {
+            const token = resp.data.token
+            const username = resp.data.username
+            localStorage.removeItem('token')
+            localStorage.setItem('token', token)
+            axios.defaults.headers.common['Authorization'] = 'Bearer ' + token
+            commit({
+              type: 'auth_success',
+              token: token,
+              username: username
+            })
+
+            resolve(resp)
+          })
+          .catch(err => {
+            reject(err)
+          })
+      })
+    }
   },
   modules: {}
 })

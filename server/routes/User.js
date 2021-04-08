@@ -5,6 +5,7 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require('bcrypt')
 const { body, validationResult } = require('express-validator');
 const authorized = require("../utils/Authorization");
+const config = require('../config')
 
 app = express()
 
@@ -94,8 +95,8 @@ app.patch("/user", authorized(), cors(), [
     return res.status(400).json({ errors: errors.array() });
   }
   if (body.email) {
-    let emailInUse = models.user.findOne({
-      attributes: [''],
+    let emailInUse = await models.user.findOne({
+      attributes: ['email'],
       where: {
         email: body.email
       }
@@ -113,7 +114,7 @@ app.patch("/user", authorized(), cors(), [
   if (body.password) {
     let password = null;
     password = await bcrypt.hash(body.password, 10)
-    if(!password) {
+    if (!password) {
       return res.status(500).json({ "valid": false, "message": "Server error" })
     }
     updateUser.password = password
@@ -126,8 +127,19 @@ app.patch("/user", authorized(), cors(), [
   })
     .then(user => {
       if (user) {
-        user.update(updateUser)
-        res.status(201).json("User information changed")
+        user.update(updateUser).then(result => {
+          let token = jwt.sign(
+            {
+              "id": result.user_id,
+              "email": result.email,
+              "username": result.username
+            },
+            config.secret,
+            {
+              "expiresIn": "6h"
+            })
+          res.status(201).json({ "token": token })
+        })
       }
     })
     .catch(err => {

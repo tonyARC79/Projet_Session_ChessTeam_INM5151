@@ -18,6 +18,9 @@
       <h2>Information de mon compte:</h2>
       <div class="settings-information p-3">
         <div role="group">
+          <div v-if="isError" class="mb-2">
+            <span class="error text-danger">Problème avec le serveur</span>
+          </div>
           <label class="float-left settings-input-title" for="input-email"
             >Adresse courriel:</label
           >
@@ -90,11 +93,17 @@ export default {
       return this.email && this.email.match(/\S+@\S+\.\S+/) ? null : false;
     },
     isNewPasswordCorrect() {
-      return (this.password === '' || (this.password != '' && this.password.length > 6)) ? null : false;
+      return this.password === "" ||
+        (this.password != "" && this.password.length > 6)
+        ? null
+        : false;
     },
     isSamePassword() {
-      return (this.confirmPassword === '' || (this.password == this.confirmPassword)) ? null : false;
-    }
+      return this.confirmPassword === "" ||
+        this.password == this.confirmPassword
+        ? null
+        : false;
+    },
   },
   data() {
     return {
@@ -104,18 +113,35 @@ export default {
       password: "",
       confirmPassword: "",
       age: null,
+      isError: false,
     };
   },
   methods: {
     modifyAccount() {
-      let userInformationToChange = {}
-      if(this.email !== store.getters.email && this.isEmailValid === null) {
+      this.isError = false;
+      let userInformationToChange = {};
+      if (this.email !== store.getters.email && this.isEmailValid === null) {
         userInformationToChange.email = this.email;
       }
-      if(this.password !== '' && this.isNewPasswordCorrect === null && this.isSamePassword === null) {
+      if (
+        this.password !== "" &&
+        this.isNewPasswordCorrect === null &&
+        this.isSamePassword === null
+      ) {
         userInformationToChange.password = this.password;
       }
-      alert(JSON.stringify(userInformationToChange))
+      if (userInformationToChange !== {}) {
+        this.$store
+          .dispatch("changeUserInformation", userInformationToChange)
+          .then(() => {
+            this.$router.replace("/user/me");
+          })
+          .catch((error) => {
+            if (error.response.status === 409) {
+              this.isError = true;
+            }
+          });
+      }
     },
   },
   mounted() {},
