@@ -41,28 +41,31 @@
           >
           <b-form-datepicker
             id="input-birthdate"
-            v-model="birth_date"
+            v-model="birthdate"
           ></b-form-datepicker>
           <label
             class="float-left settings-input-title mt-3"
             for="input-newPassword"
             >Nouveau mot de passe:</label
           >
-          <b-form-input
-            id="input-newPassword"
-            type="password"
-            v-model="password"
-            :state="isNewPasswordCorrect"
-            trim
-          ></b-form-input>
-          <b-form-invalid-feedback id="input-newPassword-feedback">
-            Mot de passe invalide
-          </b-form-invalid-feedback>
+          <div>
+            <b-form-input
+              id="input-newPassword"
+              type="password"
+              v-model="password"
+              :state="isNewPasswordCorrect"
+              trim
+            ></b-form-input>
+            <b-form-invalid-feedback id="input-newPassword-feedback">
+              Mot de passe invalide
+            </b-form-invalid-feedback>
+          </div>
           <label
             class="float-left settings-input-title mt-3"
             for="input-confirm"
             >Confirmation de mot de passe:</label
           >
+          <div>
           <b-form-input
             id="input-confirm"
             :state="isSamePassword"
@@ -73,6 +76,7 @@
           <b-form-invalid-feedback id="input-newPassword-feedback">
             Les deux mot de passe ne sont pas les même
           </b-form-invalid-feedback>
+          </div>
         </div>
         <div class="mt-4">
           <b-button ref="" type="submit" v-on:click="modifyAccount"
@@ -107,12 +111,11 @@ export default {
   },
   data() {
     return {
-      birth_date: "",
+      birthdate: store.getters.birthdate,
       username: store.getters.username,
       email: store.getters.email,
       password: "",
       confirmPassword: "",
-      age: null,
       isError: false,
     };
   },
@@ -122,6 +125,9 @@ export default {
       let userInformationToChange = {};
       if (this.email !== store.getters.email && this.isEmailValid === null) {
         userInformationToChange.email = this.email;
+      }
+      if (this.birthdate !== store.getters.birthdate) {
+        userInformationToChange.birthdate = this.birthdate;
       }
       if (
         this.password !== "" &&

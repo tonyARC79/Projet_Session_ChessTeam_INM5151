@@ -14,6 +14,7 @@ export default new Vuex.Store({
   getters: {
     isAuthenticated: state => !!state.token,
     username: state => jwt_decode(state.token).username,
+    birthdate: state => jwt_decode(state.token).birthdate,
     email: state => jwt_decode(state.token).email,
     authStatus: state => state.status,
   },
@@ -210,7 +211,6 @@ export default new Vuex.Store({
           .then(resp => {
             const token = resp.data.token
             const username = resp.data.username
-            localStorage.removeItem('token')
             localStorage.setItem('token', token)
             axios.defaults.headers.common['Authorization'] = 'Bearer ' + token
             commit({

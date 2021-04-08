@@ -11,7 +11,7 @@ app.post('/join', cors(), [
   body('email').isEmail().normalizeEmail().withMessage("Email must be valid").trim().escape(),
   body('password').isLength({ min: 5 }).isString().withMessage("Length must be more than 5 characters"),
   body('username').isString().trim().isAlphanumeric(),
-  body('age').isNumeric(),
+  body('birthdate').isDate(),
 ], async (req, res) => {
   let body = req.body
   const errors = validationResult(req)
@@ -35,13 +35,14 @@ app.post('/join', cors(), [
           username: body.username,
           email: body.email,
           password: hash,
-          age: body.age,
+          birthdate: body.birthdate,
         }).then(result => {
           let token = jwt.sign(
             {
               "id": result.user_id,
               "email": result.email,
-              "username": result.username
+              "username": result.username,
+              "birthdate": result.birthdate
             },
             config.secret,
             {
@@ -62,7 +63,7 @@ app.post("/session", [
     return res.status(400).json({ errors: errors.array() });
   }
   models.user.findOne({
-    attributes: ['password', 'user_id', 'email', 'username'],
+    attributes: ['password', 'user_id', 'email', 'username', 'birthdate'],
     where: {
       email: req.body.email,
       date_deleted: null
@@ -75,7 +76,8 @@ app.post("/session", [
             let token = jwt.sign({
               "id": user.user_id,
               "email": user.email,
-              "username": user.username
+              "username": user.username,
+              "birthdate": user.birthdate
             }, config.secret, {
               "expiresIn": "6h"
             })

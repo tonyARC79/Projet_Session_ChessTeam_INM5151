@@ -83,7 +83,7 @@ app.get("/user", authorized(), cors(), async (req, res) => {
 app.patch("/user", authorized(), cors(), [
   body('email').optional().isEmail().normalizeEmail().withMessage("Email must be valid").trim().escape(),
   body('password').optional().isLength({ min: 5 }).isString().withMessage("Length must be more than 5 characters"),
-  body('age').optional().isNumeric(),
+  body('birthdate').optional().isDate(),
 ], async (req, res) => {
   let token = jwt.decode(req.get("Authorization").split(" ")[1]);
   let userID = token.id;
@@ -108,8 +108,8 @@ app.patch("/user", authorized(), cors(), [
     }
     updateUser.email = body.email;
   }
-  if (body.age) {
-    updateUser.age = body.age;
+  if (body.birthdate) {
+    updateUser.birthdate = body.birthdate;
   }
   if (body.password) {
     let password = null;
@@ -120,7 +120,7 @@ app.patch("/user", authorized(), cors(), [
     updateUser.password = password
   }
   models.user.findOne({
-    attributes: ['username', 'date_registered'],
+    attributes: ['username', 'date_registered', 'email'],
     where: {
       user_id: userID
     }
@@ -128,11 +128,13 @@ app.patch("/user", authorized(), cors(), [
     .then(user => {
       if (user) {
         user.update(updateUser).then(result => {
+          console.log(JSON.stringify(result))
           let token = jwt.sign(
             {
               "id": result.user_id,
               "email": result.email,
-              "username": result.username
+              "username": result.username,
+              "birthdate": result.birthdate
             },
             config.secret,
             {
@@ -153,7 +155,7 @@ app.get("/profil", authorized(), cors(), async (req, res) => {
   userID = userID.id;
 
   models.user.findOne({
-    attributes: ['username', 'date_registered', 'age'],
+    attributes: ['username', 'date_registered', 'birthdate'],
     where: {
       user_id: userID
     }
