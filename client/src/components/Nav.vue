@@ -39,7 +39,7 @@
             <router-link class="nav-link" to="/join">Inscription </router-link>
           </li>
           <li class="nav-item">
-            <router-link class="nav-link" to="/tutorial">Tutorial </router-link>
+            <router-link class="nav-link" to="/tutorial">Tutoriels </router-link>
           </li>
         </ul>
       </div>
