@@ -5,6 +5,7 @@
       <div class="friend-search-list">
         <div class="list-group">
           <a
+            @click="onClickButton(item.username)"
             href="#"
             class="list-group-item list-group-item-action"
             v-for="item in lesUtilisateurs"
@@ -28,7 +29,11 @@ export default {
     lesUtilisateurs: [],
     noResult: false,
   }),
-
+  methods: {
+    onClickButton (item) {
+      this.$emit('clicked', item)
+    }
+  },
   beforeCreate() {
       this.$store
         .dispatch("getFriends")
@@ -43,7 +48,6 @@ export default {
         .catch((error) => {
           console.log(error);
         });
-
   }
 };
 </script>
