@@ -106,7 +106,6 @@ let router = new Router({
         component: Tutorial,
         meta: {
             title: 'Tutorial',
-            requiresAuth: true
         }
     },
     {

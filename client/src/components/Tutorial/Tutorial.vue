@@ -37,9 +37,6 @@
                 <small>{{ tutorial.description }}</small>
               </div>
             </a>
-            <p v-if="noResult">
-              Aucun utilisateur ne correspond à votre recherche
-            </p>
           </div>
         </div>
       </div>

@@ -25,13 +25,21 @@
             <router-link class="nav-link" to="/user/me">Profil</router-link>
           </li>
           <li v-if="isAuthenticated" class="nav-item">
-            <a class="nav-link" href="" @click="handleClick">Logout</a>
+            <a class="nav-link" href="" @click="handleClick">Se déconnecter</a>
+          </li>
+          <li v-if="isAuthenticated" class="nav-item">
+            <router-link class="nav-link" to="/play"
+              >Démarer partie
+            </router-link>
           </li>
           <li v-if="!isAuthenticated" class="nav-item">
             <router-link class="nav-link" to="/login">Login</router-link>
           </li>
           <li v-if="!isAuthenticated" class="nav-item">
             <router-link class="nav-link" to="/join">Inscription </router-link>
+          </li>
+          <li class="nav-item">
+            <router-link class="nav-link" to="/tutorial">Tutoriels </router-link>
           </li>
         </ul>
       </div>
@@ -41,11 +49,11 @@
 
 
 <script>
-import { mapGetters  } from "vuex";
+import { mapGetters } from "vuex";
 export default {
   name: "Nav",
   computed: {
-    ...mapGetters(['isAuthenticated']) 
+    ...mapGetters(["isAuthenticated"]),
   },
   data() {
     return {};
