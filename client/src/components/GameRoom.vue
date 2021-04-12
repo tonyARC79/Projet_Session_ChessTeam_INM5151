@@ -18,10 +18,6 @@
 </template>
 
 <script>
-/* eslint-disable no-unused-vars */
-
-//const imgPath = "../static/img/chesspieces/wikipedia/";
-import $ from "jquery";
 import Chessboard from "chessboardjs";
 import Chess from "chess.js";
 import io from "socket.io-client";

@@ -6,7 +6,6 @@ const session = require('./routes/Session.js')
 const userRoutes = require('./routes/User.js');
 const http = require('http')
 const socket = require('socket.io');
-const userRoutes = require('./routes/User.js')
 const friendRoutes = require('./routes/Friend.js')
 
 const port = process.env.PORT || 5000;
