@@ -225,6 +225,27 @@ export default new Vuex.Store({
             reject(err)
           })
       })
+    },
+
+    deleteUserAccount({ commit }, info) {
+      return new Promise((resolve, reject) => {
+        //commit('requete_auth')
+        axios.patch('/api/user/delete', qs.stringify(info),
+          {
+            headers: {
+              Authorization: 'Bearer ' + localStorage.getItem('token')
+            }
+          })
+          .then(resp => {
+            localStorage.removeItem('token')
+            commit('auth_erreur', 'Le compte a été supprimé')
+
+            resolve(resp)
+          })
+          .catch(err => {
+            reject(err)
+          })
+      })
     }
   },
   modules: {}

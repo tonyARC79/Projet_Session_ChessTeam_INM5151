@@ -97,14 +97,14 @@
                 >Paramètres de compte</span
               >
             </b-link>
-            <b-link href="#" class="d-flex w-100 friend-link p-1">
+            <b-button v-on:click='deleteAccount' class="d-flex w-100 friend-link p-1">
               <div class="h2 mb-0 ml-1">
                 <b-icon icon="trash-fill" scale="1"></b-icon>
               </div>
               <span class="ml-3 align-items-center d-inline-flex"
                 >Effacer compte</span
               >
-            </b-link>
+            </b-button>
           </div>
         </div>
       </div>
@@ -121,8 +121,33 @@ export default {
       name: "",
       username: store.getters.username,
       email: store.getters.email,
-      age: null,
+      birthdate: store.getters.birthdate,
+      password: store.getters.password,
     };
+  },
+  methods: {
+    deleteAccount() {
+      var today = new Date();
+      var dd = String(today.getDate()).padStart(2, "0");
+      var mm = String(today.getMonth() + 1).padStart(2, "0"); //January is 0!
+      var yyyy = today.getFullYear();
+
+      today = yyyy+ "/" + mm + "/" + dd + "/";
+      console.log(today)
+      let info = {};
+      info.date_deleted = today;
+      info.username = this.username;
+      this.$store
+        .dispatch("deleteUserAccount", info)
+        .then(() => {
+          this.$router.replace("/login");
+        })
+        .catch((error) => {
+          if (error.response.status === 409) {
+            this.isError = true;
+          }
+        });
+    },
   },
   mounted() {},
 };

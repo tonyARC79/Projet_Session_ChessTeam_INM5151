@@ -149,6 +149,46 @@ app.patch("/user", authorized(), cors(), [
     });
 });
 
+app.patch("/user/delete", authorized(), cors(), [
+  body('email').optional().isEmail().normalizeEmail().withMessage("Email must be valid").trim().escape(),  
+  body('date_deleted').optional().isDate()
+], async (req, res) => {
+  let token = jwt.decode(req.get("Authorization").split(" ")[1]);
+  let userID = token.id;
+  let body = req.body
+  let updateUser = {}
+  updateUser.user_id = userID;
+  const errors = validationResult(req)
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
+  }
+
+  if (body.date_deleted) {
+    updateUser.date_deleted = body.date_deleted;
+  }
+  models.user.findOne({
+    attributes: ['email'],
+    where: {
+      user_id: userID
+    }
+  })
+    .then(user => {
+      if (user) {
+        user.update(updateUser).then(result => {
+          let token = null;
+          res.status(201).json({
+            "token": token,
+            "msg": 'Account deleted'
+          })
+        })
+      }
+    })
+    .catch(err => {
+      console.log(err)
+      res.status(500).json({ error: "Server Error" })
+    });
+});
+
 app.get("/profil", authorized(), cors(), async (req, res) => {
   let userID = jwt.decode(req.get("Authorization").split(" ")[1]);
   userID = userID.id;
