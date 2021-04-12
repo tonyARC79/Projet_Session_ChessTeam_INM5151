@@ -22,24 +22,24 @@
       <div class="collapse navbar-collapse" id="navbarNavDropdown">
         <ul class="navbar-nav mr-auto">
           <li v-if="isAuthenticated" class="nav-item">
-            <router-link class="nav-link" to="/user/me">Profil</router-link>
-          </li>
-          <li v-if="isAuthenticated" class="nav-item">
-            <a class="nav-link" href="" @click="handleClick">Se déconnecter</a>
-          </li>
-          <li v-if="isAuthenticated" class="nav-item">
             <router-link class="nav-link" to="/play"
-              >Démarer partie
+              >Jouer
             </router-link>
+          </li>
+          <li v-if="isAuthenticated" class="nav-item">
+            <router-link class="nav-link" to="/user/me">Profil</router-link>
           </li>
           <li v-if="!isAuthenticated" class="nav-item">
             <router-link class="nav-link" to="/login">Login</router-link>
           </li>
           <li v-if="!isAuthenticated" class="nav-item">
-            <router-link class="nav-link" to="/join">Inscription </router-link>
+            <router-link class="nav-link" to="/join">Inscription</router-link>
           </li>
           <li class="nav-item">
-            <router-link class="nav-link" to="/tutorial">Tutoriels </router-link>
+            <router-link class="nav-link" to="/tutorial">Tutoriel</router-link>
+          </li>
+          <li v-if="isAuthenticated" class="nav-item">
+            <a class="nav-link" href="" @click="handleClick">Déconnexion</a>
           </li>
         </ul>
       </div>
