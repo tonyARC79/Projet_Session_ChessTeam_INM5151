@@ -3,6 +3,7 @@ const models = require('./../models');
 var cors = require('cors')
 const jwt = require("jsonwebtoken");
 const bcrypt = require('bcrypt')
+const moment = require('moment'); 
 const { body, validationResult } = require('express-validator');
 const authorized = require("../utils/Authorization");
 const config = require('../config')
@@ -149,23 +150,16 @@ app.patch("/user", authorized(), cors(), [
     });
 });
 
-app.patch("/user/delete", authorized(), cors(), [
-  body('email').optional().isEmail().normalizeEmail().withMessage("Email must be valid").trim().escape(),  
-  body('date_deleted').optional().isDate()
-], async (req, res) => {
+app.patch("/user/delete", authorized(), async (req, res) => {
   let token = jwt.decode(req.get("Authorization").split(" ")[1]);
   let userID = token.id;
-  let body = req.body
   let updateUser = {}
-  updateUser.user_id = userID;
   const errors = validationResult(req)
   if (!errors.isEmpty()) {
     return res.status(400).json({ errors: errors.array() });
   }
-
-  if (body.date_deleted) {
-    updateUser.date_deleted = body.date_deleted;
-  }
+  updateUser.user_id = userID;
+  updateUser.date_deleted = moment();
   models.user.findOne({
     attributes: ['email'],
     where: {
@@ -175,9 +169,7 @@ app.patch("/user/delete", authorized(), cors(), [
     .then(user => {
       if (user) {
         user.update(updateUser).then(result => {
-          let token = null;
           res.status(201).json({
-            "token": token,
             "msg": 'Account deleted'
           })
         })

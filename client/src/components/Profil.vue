@@ -97,14 +97,14 @@
                 >Paramètres de compte</span
               >
             </b-link>
-            <b-button v-on:click='deleteAccount' class="d-flex w-100 friend-link p-1">
+            <b-link v-on:click='deleteAccount' class="d-flex w-100 friend-link p-1">
               <div class="h2 mb-0 ml-1">
                 <b-icon icon="trash-fill" scale="1"></b-icon>
               </div>
               <span class="ml-3 align-items-center d-inline-flex"
                 >Effacer compte</span
               >
-            </b-button>
+            </b-link>
           </div>
         </div>
       </div>
@@ -127,18 +127,8 @@ export default {
   },
   methods: {
     deleteAccount() {
-      var today = new Date();
-      var dd = String(today.getDate()).padStart(2, "0");
-      var mm = String(today.getMonth() + 1).padStart(2, "0"); //January is 0!
-      var yyyy = today.getFullYear();
-
-      today = yyyy+ "/" + mm + "/" + dd + "/";
-      console.log(today)
-      let info = {};
-      info.date_deleted = today;
-      info.username = this.username;
       this.$store
-        .dispatch("deleteUserAccount", info)
+        .dispatch("deleteUserAccount")
         .then(() => {
           this.$router.replace("/login");
         })

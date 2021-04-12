@@ -15,7 +15,7 @@
               <b-icon icon="person-fill" aria-hidden="true"></b-icon>
             </div>
             <p class="mb-1">{{ item.username }}</p>
-            <small>date register</small>
+            <small>Rejoint le : {{ item.date_registered | moment }}</small>
           </a>
           <p v-if="noResult">Vous n'avez aucune ami</p>
         </div>
@@ -24,11 +24,18 @@
   </div>
 </template>
 <script>
+import moment from "moment";
 export default {
   data: () => ({
     lesUtilisateurs: [],
     noResult: false,
   }),
+  filters: {
+    moment: function (date) {
+      moment.locale('fr')
+      return moment(date).format("MMMM Do YYYY");
+    },
+  },
   methods: {
     onClickButton (item) {
       this.$emit('clicked', item)
