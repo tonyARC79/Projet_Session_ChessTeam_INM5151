@@ -204,7 +204,7 @@ async function getFriends(userID) {
     include: [{
       model: models.user,
       as: 'Relating',
-      attributes: ['username', 'user_id'],
+      attributes: ['username', 'user_id', 'date_registed'],
       through: { attributes: [] },
       include: {
         model: models.relationship,
@@ -232,6 +232,7 @@ function formatFriendJSON(user) {
   for (const relatingFriends of user.Relating) {
     friends.push({
       "username": relatingFriends.username,
+      "RegisterDate": relatingFriends.date_registed,
     })
   }
   return friends
