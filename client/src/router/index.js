@@ -8,6 +8,8 @@ import Home from '@/components/Home'
 import Profil from '@/components/Profil'
 import Play from '@/components/Play'
 import Tutorial from '@/components/Tutorial/Tutorial.vue'
+import GameRoom from '@/components/GameRoom'
+import Full from '@/components/Full'
 Vue.use(Router)
 
 let router = new Router({
@@ -47,7 +49,15 @@ let router = new Router({
             requiresAuth: true
         }
     },
-    
+    {
+        path: '/play/full',
+        name: 'roomFull',
+        component: Full,
+        meta: {
+            title: 'Complet',
+            requiresAuth: true
+        }
+    },
     {
         path: '/friends/find',
         name: 'find friends',
@@ -63,6 +73,15 @@ let router = new Router({
         component: Play,
         meta: {
             title: 'play',
+            requiresAuth: true
+        },
+    },
+    {
+        path: '/play/GameRoom',
+        name: 'GameRoom',
+        component: GameRoom,
+        meta: {
+            title: 'GameBoard_2v2',
             requiresAuth: true
         },
     },
