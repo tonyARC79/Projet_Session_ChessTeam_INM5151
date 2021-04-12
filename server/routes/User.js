@@ -128,7 +128,6 @@ app.patch("/user", authorized(), cors(), [
     .then(user => {
       if (user) {
         user.update(updateUser).then(result => {
-          console.log(JSON.stringify(result))
           let token = jwt.sign(
             {
               "id": result.user_id,
