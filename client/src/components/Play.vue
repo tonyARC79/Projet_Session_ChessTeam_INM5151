@@ -1,40 +1,84 @@
 <template>
-  <div class="chessboard-container">
-    <chessboard />
+  <div class="container">
+    <div class="row d-flex justify-content-center">
+      <div class="col offset-md-4">
+        <chessboard />
+      </div>
+      <div class="col">
+        <h3>Durée</h3>
+        <b-dropdown id="dropdown-1" :text="dropBoxTitle" class="m-md-2">
+          <b-dropdown-item @click="(time = '10'), printTime()"
+            >10 minutes</b-dropdown-item
+          >
+          <b-dropdown-item @click="(time = '20'), printTime()"
+            >20 minutes</b-dropdown-item
+          >
+          <b-dropdown-item @click="(time = '30'), printTime()"
+            >30 minutes</b-dropdown-item
+          >
+        </b-dropdown>
+        <br />
+        <br />
+        <h3>Mode de jeu</h3>
+        <b-dropdown id="dropdown-2" :text="gameMode" class="m-md-2">
+          <b-dropdown-item @click="gameMode = 'Aléatoire'"
+            >Aléatoire</b-dropdown-item
+          >
+          <b-dropdown-item @click="gameMode = 'Ami'">Ami</b-dropdown-item>
+          <b-dropdown-item @click="gameMode = 'Intelligence artificielle'"
+            >Intelligence Artificielle</b-dropdown-item
+          >
+        </b-dropdown>
+        <friends v-if="this.gameMode === 'Ami'" @clicked="onClickChild" />
+        <br />
+        <br />
+        <b-button type="submit" v-on:click="launchGame">Jouer</b-button>
+      </div>
+    </div>
   </div>
 </template>
 <script>
 import { chessboard } from "vue-chessboard";
+import friends from "./Friend/Friends.vue";
 export default {
   components: {
     chessboard,
+    friends,
   },
-  data() {
-    return {
-      currentFen: "",
-      positionInfo: null,
-    };
+  data: () => ({
+    time: 10,
+    dropBoxTitle: "10 minutes",
+    gameMode: "Aléatoire",
+    userA: "",
+    userB: "",
+  }),
+  mounted() {
+    this.userA = this.$store.getters.username;
   },
+
   methods: {
-    showInfo(data) {
-      this.positionInfo = data;
+    printTime() {
+      this.dropBoxTitle = this.time + " minutes";
+      console.log(this.userA);
     },
-    loadFen(fen) {
-      this.currentFen = fen;
+    onClickChild(item) {
+      this.userB = item;
+      this.gameMode = item;
     },
-    promote() {
-      if (confirm("Want to promote to rook? Queen by default")) {
-        return "r";
-      } else {
-        return "q";
+    launchGame() {
+      if (this.gameMode === "Ami") {
+        console.log(this.userB);
+        /* this.$store
+          .dispatch("game", {
+            time: this.time,
+            userA: this.userA,
+            userB: this.userB
+          }) 
+          .then(() => {
+            this.$router.replace("/friends");
+          }*/
       }
     },
-  },
-  created() {
-    this.fens = [
-      "5rr1/3nqpk1/p3p2p/Pp1pP1pP/2pP1PN1/2P1Q3/2P3P1/R4RK1 b - f3 0 28",
-      "r4rk1/pp1b3p/6p1/8/3NpP2/1P4P1/P2K3P/R6R w - - 0 22",
-    ];
   },
 };
 </script>

@@ -14,6 +14,7 @@ export default new Vuex.Store({
   getters: {
     isAuthenticated: state => !!state.token,
     username: state => jwt_decode(state.token).username,
+    birthdate: state => jwt_decode(state.token).birthdate,
     email: state => jwt_decode(state.token).email,
     authStatus: state => state.status,
   },
@@ -102,7 +103,6 @@ export default new Vuex.Store({
               token: token,
               username: username
             })
-            console.log(resp.token)
 
             resolve(resp)
           })
@@ -133,6 +133,99 @@ export default new Vuex.Store({
           })
       })
     },
+    getFriends() {
+      return new Promise((resolve, reject) => {
+        axios.get('/api/me/friends', {
+          headers:
+            { "Authorization": 'Bearer ' + localStorage.getItem('token') }
+        })
+          .then(resp => {
+            resolve(resp.data)
+          })
+          .catch(err => {
+            reject(err)
+          })
+      })
+    },
+    sendFriendRequest(_, usernameQuery) {
+      return new Promise((resolve, reject) => {
+        axios.post('/api/friend/request', {
+          username: usernameQuery
+        },
+          {
+            headers: {
+              Authorization: 'Bearer ' + localStorage.getItem('token')
+            }
+          })
+          .then(resp => {
+            resolve(resp)
+          })
+          .catch(err => {
+            reject(err)
+          })
+      })
+    },
+    getFriendsRequests() {
+      return new Promise((resolve, reject) => {
+        axios.get('/api/me/requests',
+          {
+            headers: {
+              Authorization: 'Bearer ' + localStorage.getItem('token')
+            }
+          })
+          .then(resp => {
+            resolve(resp.data)
+          })
+          .catch(err => {
+            reject(err)
+          })
+      })
+    },
+    accepterDemandeAmi(_, usernameQuery) {
+      return new Promise((resolve, reject) => {
+        axios.post('/api/friend', {
+          username: usernameQuery
+        },
+          {
+            headers: {
+              Authorization: 'Bearer ' + localStorage.getItem('token')
+            }
+          })
+          .then(resp => {
+            resolve(resp)
+          })
+          .catch(err => {
+            reject(err)
+          })
+      })
+    },
+    changeUserInformation({ commit }, info) {
+      return new Promise((resolve, reject) => {
+        commit('requete_auth')
+        axios.patch('/api/user', qs.stringify(info),
+          {
+            headers: {
+              Authorization: 'Bearer ' + localStorage.getItem('token')
+            }
+          })
+          .then(resp => {
+            const token = resp.data.token
+            const username = resp.data.username
+            localStorage.setItem('token', token)
+            axios.defaults.headers.common['Authorization'] = 'Bearer ' + token
+            commit({
+              type: 'auth_success',
+              token: token,
+              username: username
+            })
+
+            resolve(resp)
+          })
+          .catch(err => {
+            reject(err)
+          })
+      })
+    }
   },
   modules: {}
 })
