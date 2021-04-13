@@ -18,8 +18,8 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING(75),
       allowNull: false
     },
-    age: {
-      type: DataTypes.INTEGER,
+    birthdate: {
+      type: DataTypes.DATE,
       allowNull: false
     },
     date_registed: {
@@ -32,9 +32,32 @@ module.exports = (sequelize, DataTypes) => {
       defaultValue: null
     }
   }, {
-      sequelize,
-      timestamps: false,
-      freezeTableName: true
-    });
+    sequelize,
+    timestamps: false,
+    freezeTableName: true
+  });
+
+
+  User.associate = (models) => {
+    User.belongsToMany(models.user,
+      {
+        as: 'Related',
+        through: models.relationship,
+        foreignKey: 'related_user_fk',
+      }),
+      User.belongsToMany(models.user,
+        {
+          as: 'Relating',
+          through: models.relationship,
+          foreignKey: 'relating_user_fk',
+        }),
+      User.hasMany(models.relationship, {
+        as: 'relationship_related',
+        foreignKey: {
+          name: 'related_user_fk',
+          allowNull: false
+        }
+      });
+  };
   return User;
 };

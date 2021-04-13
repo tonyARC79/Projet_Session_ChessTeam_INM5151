@@ -1,0 +1,18 @@
+.settings-title {
+  background-color: #f2f3f5;
+  border-radius: 15px;
+}
+
+.settings-information {
+  border-style: solid;
+  border-color: #000000;
+  border-width: 2px;
+  border-radius: 30px;
+  width: 40%;
+  margin: 4vh auto 4vh auto;
+  text-align: center;
+}
+
+.settings-input-title {
+  font-weight: 750;
+}

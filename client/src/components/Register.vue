@@ -58,14 +58,12 @@
         ></b-form-input>
       </div>
       <div class="mt-4">
-        <span class="error text-danger">{{ errors.age }}</span>
-        <b-form-input
-          v-model="newUser.age"
-          size="15"
-          type="number"
-          name="age"
-          placeholder="Entre votre âge"
-        ></b-form-input>
+        <span class="error text-danger">{{ errors.birthdate }}</span>
+        <b-form-datepicker
+          id="input-birthdate"
+          v-model="newUser.birthdate"
+          placeholder="Entre votre date de naissance"
+        ></b-form-datepicker>
       </div>
       <div class="mt-4">
         <b-button ref="" type="submit" v-on:click="register"
@@ -82,7 +80,7 @@ export default {
     newUser: {
       username: null,
       email: null,
-      age: null,
+      birthdate: null,
       password: null,
     },
     confirmPassword: null,
@@ -99,7 +97,10 @@ export default {
           .dispatch("validUsername", username)
           .then((res) => {
             let isValid = res.valid;
-            if (!isValid) {
+            if(isValid) {
+              this.invalidUsername = ''
+            }
+            else {
               this.invalidUsername = res.message;
             }
           })
@@ -107,9 +108,8 @@ export default {
             console.log(err);
             this.errors.name = "Erreur avec le serveur";
           });
-      }
-      else {
-        this.invalidUsername = ""
+      } else {
+        this.invalidUsername = "";
       }
     },
     register() {
@@ -134,8 +134,8 @@ export default {
       if (this.newUser.password !== this.confirmPassword) {
         this.errors.password = "Les mots de passes doivent être identique";
       }
-      if (!this.newUser.age) {
-        this.errors.age = "L'âge est obligatoire";
+      if (!this.newUser.birthdate) {
+        this.errors.birthdate = "L'âge est obligatoire";
       }
       if (Object.keys(this.errors).length === 0) {
         this.formulaireValide = true;
