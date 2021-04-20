@@ -76,6 +76,12 @@
 
 <script>
 export default {
+  props: ["email"],
+  mounted() {
+    if (this.email) {
+      this.newUser.email = this.email;
+    }
+  },
   data: () => ({
     newUser: {
       username: null,
@@ -97,10 +103,9 @@ export default {
           .dispatch("validUsername", username)
           .then((res) => {
             let isValid = res.valid;
-            if(isValid) {
-              this.invalidUsername = ''
-            }
-            else {
+            if (isValid) {
+              this.invalidUsername = "";
+            } else {
               this.invalidUsername = res.message;
             }
           })

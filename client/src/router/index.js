@@ -23,15 +23,11 @@ let router = new Router({
     mode: 'history',
     base: process.env.BASE_URL,
     routes: [{
-        path: '/home',
-        name: 'home',
-        component: Home
-    }, {
         path: '/',
-        name: 'session',
-        component: Login,
+        name: 'Accueil',
+        component: Home,
         meta: {
-            title: 'Session',
+            title: 'Accueil',
         }
     },
     {
@@ -43,6 +39,7 @@ let router = new Router({
         path: '/join',
         name: 'join',
         component: Register,
+        props: true,
         meta: {
             title: 'Inscription',
         }
