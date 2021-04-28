@@ -1,5 +1,31 @@
-.chessboard-container {
+.game-container {
   margin: auto;
-  width: 50%;
-  padding: 10px;
+  width: 100%;
+  display: grid;
+  grid-template-areas: "side board";
+  grid-template-columns: 30% 70%;
+  grid-template-rows: 80vh;
+}
+
+.aside-container {
+  grid-area: side;
+}
+
+.chessboard-container {
+  display: grid;
+  grid-area: board;
+  grid-template-areas: "board message";
+  grid-template-columns: 50% 50%;
+}
+
+.chessboard {
+  width: 100%;
+  text-align: center; 
+  grid-area: board;
+  float: left;
+  padding-bottom: 100%;
+}
+
+.message-container {
+  grid-area: message;
 }

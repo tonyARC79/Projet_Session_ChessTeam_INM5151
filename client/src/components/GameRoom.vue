@@ -1,19 +1,19 @@
-<template>
-  <div>
-    <div>
-      <div
-        id="myBoard"
-        style="width: 500px; text-align: center; margin: auto"
-      ></div>
-      <!-- <label>Status:</label> -->
-      <!-- <div id="status"></div>
-      <div id="fen"></div> -->
-    </div>
-    <!-- <div v-else-if=""></div> -->
+<style>
+@import "../assets/chess.css";
+</style>
 
-    <!-- <div v-if="nbPlayer == 1"><br><br>{{waitingMsg}}</div> -->
-    <!-- <button v-if="!gameAccepted" class="btn btn-sm btn-primary w-100 ml-2" v-on:click="playerJoinsGame">{{joinMsg}}</button> -->
-    <div id="state"></div>
+<template>
+  <div class="game-container">
+    <div class="aside-container"></div>
+    <div class="chessboard-container"> 
+    <div
+      id="myBoard"
+      class="chessboard"
+    ></div>
+
+
+    <div id="state" class="message-container"> <!--mettre div du message board ici--></div>
+    </div>
   </div>
 </template>
 
@@ -51,7 +51,7 @@ export default {
       room: 0,
       config: {},
       play: true,
-      players: 0
+      players: 0,
     };
   },
   methods: {
@@ -129,15 +129,12 @@ export default {
     var play = true;
     var roomId = 0;
 
-
     var game = this.game;
 
     roomId = this.room;
-    
-    
-    
-      this.socket.emit("joined", roomId);
-    
+
+    this.socket.emit("joined", roomId);
+
     socket.on("full", function (msg) {
       if (roomId == msg) this.$router.replace("/play/full");
     });
