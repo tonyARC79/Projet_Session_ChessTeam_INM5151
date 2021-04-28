@@ -180,11 +180,6 @@ export default {
       }
     }
 
-    // if (this.game.turn() === "w") {
-    //   this.color = "white";
-    // } else {
-    //   this.color = "black";
-    // }
 
     // var config = {
     //   orientation: this.color,
