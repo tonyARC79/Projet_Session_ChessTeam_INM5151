@@ -38,7 +38,6 @@ for (let i = 0; i < 1; i++) {
 io.on('connection', function (socket) {
 
   var playerId = Math.floor((Math.random() * 10) + 1);
-  //console.log('Player # ' + playerId + ' is connected');
 
 
   socket.on('joined', function (roomId) {

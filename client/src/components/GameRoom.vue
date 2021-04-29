@@ -5,19 +5,20 @@
 <template>
   <div class="game-container">
     <div class="aside-container"></div>
-    <div class="chessboard-container"> 
-    <div
-      id="myBoard"
-      class="chessboard"
-    ></div>
+    <div class="chessboard-container">
+      <div id="myBoard" class="chessboard"></div>
 
-
-    <div id="state" class="message-container"> <!--mettre div du message board ici--></div>
+      <div id="state" class="message-container">
+        temps blanc: {{ this.timeWhite }}<br />
+        Temps black: {{ this.timeBlack }}
+        <!--mettre div du message board ici-->
+      </div>
     </div>
   </div>
 </template>
 
 <script>
+import moment from "moment";
 import Chessboard from "chessboardjs";
 import Chess from "chess.js";
 import io from "socket.io-client";
@@ -33,9 +34,16 @@ import wQueen from "../static/img/chesspieces/wikipedia/wQ.png";
 import wBishop from "../static/img/chesspieces/wikipedia/wB.png";
 import wKnight from "../static/img/chesspieces/wikipedia/wN.png";
 import wRook from "../static/img/chesspieces/wikipedia/wR.png";
-
 export default {
   name: "GameRoom",
+  computed: {
+    timeWhite: function () {
+      return this.timeLeftWhite.format("mm:ss");
+    },
+    timeBlack: function () {
+      return this.timeLeftBlack.format("mm:ss");
+    },
+  },
   data() {
     return {
       nbPlayer: 0,
@@ -52,14 +60,15 @@ export default {
       config: {},
       play: true,
       players: 0,
+      timeLeftWhite: moment(60 * 10 * 1000),
+      timeLeftBlack: moment(60 * 10 * 1000),
+      isWhiteTurn: true,
     };
   },
   methods: {
-    // playerJoinsGame(){
-    //   this.nbPlayer += 1;
-    //   this.waitingMsg = 'Votre adversaire se prépare...';
-    //   this.gameAccepted = true;
-    // },
+    updateTurn(msg) {
+      this.isWhiteTurn = msg.move.color !== "w";
+    },
 
     onDragStart(source, piece) {
       //piece = this.piece;
@@ -119,6 +128,20 @@ export default {
   },
 
   mounted() {
+    setInterval(() => {
+      if (this.game.history().length > 0) {
+        if (this.isWhiteTurn) {
+          this.timeLeftWhite = moment(
+            this.timeLeftWhite.subtract(1, "seconds")
+          );
+        } else {
+          this.timeLeftBlack = moment(
+            this.timeLeftBlack.subtract(1, "seconds")
+          );
+        }
+      }
+    }, 1000);
+
     /* eslint-disable no-unused-vars */
     var board = null;
     var socket = io("http://localhost:5000", { transports: ["websocket"] });
@@ -177,33 +200,18 @@ export default {
       }
     }
 
-    // if (this.game.turn() === "w") {
-    //   this.color = "white";
-    // } else {
-    //   this.color = "black";
-    // }
-
-    // var config = {
-    //   orientation: this.color,
-    //   pieceTheme: pieceTheme,
-    //   draggable: true,
-    //   position: "start",
-    //   onDragStart: this.onDragStart,
-    //   onDrop: this.onDrop,
-    //   onSnapEnd: this.onSnapEnd,
-    // };
-    // this.board = Chessboard("myBoard", config);
-    // board = this.board;
-
     socket.on("play", function (msg) {
       if (msg == roomId) {
+        console.log("play");
         this.play = false;
       }
       console.log(msg);
     });
 
-    socket.on("move", function (msg) {
+    socket.on("move", msg => {
+      this.updateTurn(msg);
       if (msg.room == roomId) {
+        console.log(JSON.stringify(msg));
         game.move(msg.move);
         board.position(game.fen());
         console.log("moved : " + msg.move);
