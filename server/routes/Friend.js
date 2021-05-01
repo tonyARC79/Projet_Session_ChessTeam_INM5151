@@ -229,4 +229,18 @@ async function getGameRequests(userID) {
       throw new Error(err)
     });
 }
+
+// async function getCurrentGames(userID) {
+//   return await models.game.findAll({
+//     where: {
+//       player2: userID,
+//       status: 'pending'
+//     }
+//   }).then(games => {
+//     return games;
+//   })
+//     .catch(err => {
+//       throw new Error(err)
+//     });
+// }
 module.exports = app;
