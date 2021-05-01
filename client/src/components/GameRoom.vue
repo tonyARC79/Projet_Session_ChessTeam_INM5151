@@ -5,14 +5,15 @@
 <template>
   <div class="game-container">
     <div class="aside-container"></div>
-    <div class="chessboard-container"> 
-    <div
-      id="myBoard"
-      class="chessboard"
-    ></div>
+    <div class="chessboard-container">
+      <div id="myBoard" class="chessboard"></div>
 
+      <div id="state" class="message-container">
+        <!--mettre div du message board ici-->
 
-    <div id="state" class="message-container"> <!--mettre div du message board ici--></div>
+        <h3>{{ username }} VS Opponent</h3>
+        Moves: {{ this.updateMoveHistory() }}
+      </div>
     </div>
   </div>
 </template>
@@ -33,15 +34,14 @@ import wQueen from "../static/img/chesspieces/wikipedia/wQ.png";
 import wBishop from "../static/img/chesspieces/wikipedia/wB.png";
 import wKnight from "../static/img/chesspieces/wikipedia/wN.png";
 import wRook from "../static/img/chesspieces/wikipedia/wR.png";
+import store from "../store";
 
 export default {
   name: "GameRoom",
   data() {
     return {
-      nbPlayer: 0,
-      waitingMsg: "",
-      joinMsg: "Joindre la partie",
-      gameAccepted: false,
+      username: store.getters.username,
+      opponent: "",
       socket: io("http://localhost:5000", { transports: ["websocket"] }),
       game: new Chess(),
       color: "white",
@@ -52,15 +52,11 @@ export default {
       config: {},
       play: true,
       players: 0,
+      playerId: null,
+      nbMove: 0,
     };
   },
   methods: {
-    // playerJoinsGame(){
-    //   this.nbPlayer += 1;
-    //   this.waitingMsg = 'Votre adversaire se prépare...';
-    //   this.gameAccepted = true;
-    // },
-
     onDragStart(source, piece) {
       //piece = this.piece;
       // do not pick up pieces if the game is over
@@ -69,19 +65,13 @@ export default {
       // only pick up pieces for the side to move
       if (
         (this.game.turn() === "w" && piece.search(/^b/) !== -1) ||
-        (this.game.turn() === "b" && piece.search(/^w/) !== -1)
+        (this.game.turn() === "b" && piece.search(/^w/) !== -1) ||
+        (this.game.turn() === "w" && this.color == "black") ||
+        (this.game.turn() === "b" && this.color == "white")
       ) {
         return false;
       }
-      // if (
-      //   this.game.game_over() === true || this.play ||
-      //   (this.game.turn() === "w" && piece.search(/^b/) !== -1) ||
-      //   (this.game.turn() === "b" && piece.search(/^w/) !== -1) ||
-      //   (this.game.turn() === "w" && this.color === "black") ||
-      //   (this.game.turn() === "b" && this.color === "white")
-      // ) {
-      //   return false;
-      // }
+      console.log(this.color);
     },
 
     onDrop(source, target) {
@@ -116,27 +106,26 @@ export default {
     createBoard(config) {
       return new Chessboard("myBoard", config);
     },
+    updateMoveHistory() {
+      console.log("yooo");
+      return this.game.history({ verbose: true });
+    },
   },
 
   mounted() {
     /* eslint-disable no-unused-vars */
     var board = null;
-    var socket = io("http://localhost:5000", { transports: ["websocket"] });
-    //this.socket = socket;
-
-    var color = "white";
-    var players;
-    var play = true;
+    var socket = this.socket;
     var roomId = 0;
 
     var game = this.game;
 
     roomId = this.room;
 
-    this.socket.emit("joined", roomId);
+    socket.emit("joined", { roomId: roomId, username: this.username });
 
-    socket.on("full", function (msg) {
-      if (roomId == msg) this.$router.replace("/play/full");
+    socket.on("opponent", function (opponent) {
+      this.opponent = opponent;
     });
 
     function pieceTheme(piece) {
@@ -177,26 +166,8 @@ export default {
       }
     }
 
-    // if (this.game.turn() === "w") {
-    //   this.color = "white";
-    // } else {
-    //   this.color = "black";
-    // }
-
-    // var config = {
-    //   orientation: this.color,
-    //   pieceTheme: pieceTheme,
-    //   draggable: true,
-    //   position: "start",
-    //   onDragStart: this.onDragStart,
-    //   onDrop: this.onDrop,
-    //   onSnapEnd: this.onSnapEnd,
-    // };
-    // this.board = Chessboard("myBoard", config);
-    // board = this.board;
-
     socket.on("play", function (msg) {
-      if (msg == roomId) {
+      if (msg == this.roomId) {
         this.play = false;
       }
       console.log(msg);
@@ -206,34 +177,36 @@ export default {
       if (msg.room == roomId) {
         game.move(msg.move);
         board.position(game.fen());
-        console.log("moved : " + msg.move);
+        console.log("moved : " + msg.move.to);
+        this.currentMove = game.history({ verbose: true });
+        console.log(this.currentMove);
       }
     });
 
     socket.on("player", (msg) => {
       this.color = msg.color;
       this.players = msg.players;
-      console.log(this.color);
-      if (players == 2) {
+      console.log(msg);
+      if (this.players == 2) {
         this.play = false;
         socket.emit("play", msg.roomId);
       }
+      this.config = {
+        orientation: this.color,
+        pieceTheme: pieceTheme,
+        draggable: true,
+        position: "start",
+        onDragStart: this.onDragStart,
+        onDrop: this.onDrop,
+        onSnapEnd: this.onSnapEnd,
+      };
+      this.board = this.createBoard(this.config);
+      board = this.board;
     });
-
-    this.config = {
-      orientation: this.color,
-      pieceTheme: pieceTheme,
-      draggable: true,
-      position: "start",
-      onDragStart: this.onDragStart,
-      onDrop: this.onDrop,
-      onSnapEnd: this.onSnapEnd,
-    };
-    this.board = this.createBoard(this.config);
-    board = this.board;
-
-    //updateStatus();
   },
+  // destroyed() {
+  //   this.socket.emit("disconnect");
+  // },
 };
 </script>
 <style lang="">

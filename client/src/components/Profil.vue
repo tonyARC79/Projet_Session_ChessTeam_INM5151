@@ -76,7 +76,21 @@
                 <b-icon icon="envelope-fill" scale="1"></b-icon>
               </div>
               <span class="ml-3 align-items-center d-inline-flex"
-                >Invitation en attente</span
+                >Invitations en attente</span
+              >
+            </b-link>
+            <b-link
+              href="/game_requests"
+              class="d-flex w-100 friend-link p-1"
+            >
+              
+                <img
+                  src="../images/playGameFriend_BasicIcon.png"
+                  alt=""
+                  height="35"
+                />
+              <span class="ml-3 align-items-center d-inline-flex"
+                >Demandes de parties</span
               >
             </b-link>
           </div>
@@ -97,7 +111,10 @@
                 >Paramètres de compte</span
               >
             </b-link>
-            <b-link v-on:click='deleteAccount' class="d-flex w-100 friend-link p-1">
+            <b-link
+              v-on:click="deleteAccount"
+              class="d-flex w-100 friend-link p-1"
+            >
               <div class="h2 mb-0 ml-1">
                 <b-icon icon="trash-fill" scale="1"></b-icon>
               </div>
