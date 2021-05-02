@@ -11,7 +11,7 @@
       <div id="state" class="message-container">
         <!--mettre div du message board ici-->
 
-        <h3>{{ username }} VS Opponent</h3>
+        <h2>{{ username }} VS {{ this.$route.query.opponent }}</h2>
         Moves: {{ this.updateMoveHistory() }}
       </div>
     </div>
@@ -41,7 +41,6 @@ export default {
   data() {
     return {
       username: store.getters.username,
-      opponent: "",
       socket: io("http://localhost:5000", { transports: ["websocket"] }),
       game: new Chess(),
       color: "white",
@@ -52,8 +51,8 @@ export default {
       config: {},
       play: true,
       players: 0,
-      playerId: null,
       nbMove: 0,
+      game_id: this.$route.query.game_id
     };
   },
   methods: {
@@ -84,6 +83,26 @@ export default {
 
       if (this.game.game_over()) {
         this.socket.emit("gameOver", this.roomId);
+
+        let gameResults = {
+          game_id: this.game_id,
+          winner: this.color + ' ' + username,
+          moves: ''
+        }
+        if (this.color == "white") {
+          this.$store
+            .dispatch("setGameResult", gameResults)
+            .then((resp) => {
+              if (resp.status == 201) {
+                console.log('Félicitations! Vous avez gagné la partie! :D')
+              } else {
+                this.makeToast("Erreur avec le serveur, veuillez réesayer");
+              }
+            })
+            .catch((error) => {
+              console.log(error);
+            });
+        }
       }
       // illegal move
       if (move === null) {
@@ -109,6 +128,17 @@ export default {
     updateMoveHistory() {
       console.log("yooo");
       return this.game.history({ verbose: true });
+    },
+
+    getOpponentName() {
+      this.$store
+        .dispatch("getGameInfosById", this.$route.query.game_id)
+        .then((infos) => {
+          return infos.game_id;
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     },
   },
 

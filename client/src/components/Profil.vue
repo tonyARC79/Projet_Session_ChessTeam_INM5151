@@ -90,7 +90,7 @@
                   height="35"
                 />
               <span class="ml-3 align-items-center d-inline-flex"
-                >Demandes de parties</span
+                >Mes parties</span
               >
             </b-link>
           </div>

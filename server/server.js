@@ -31,7 +31,7 @@ var username = ''
 var games = Array(1);
 for (let i = 0; i < 1; i++) {
   games[i] = { players: 0, pid: [0, 0] };
-  console.log('Game #' + games[i])
+  //console.log('Game #' + games[i])
 }
 
 
