@@ -13,6 +13,7 @@
       }"
     >
       <div class="home-description">
+         
         <h1>Jeu intéractif d'échecs pour les débutants</h1>
         <p>
           ChessMess est un site web qui vous permettra d'apprendre sur le jeu
@@ -22,8 +23,7 @@
           élément compétitif et servira uniquement à ce que vous vous améliorer
           aux échecs et ce à chaque partie à l'aide de nos nombreaux outils
           d'apprentissage!
-          <br />
-          <br />
+          <br>
           Pour utiliser l&apos;application, vous devez créer un compte
           utilisateur. Inscrivivez vous dès maintenant.
         </p>
