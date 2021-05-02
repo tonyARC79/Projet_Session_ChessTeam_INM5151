@@ -9,8 +9,8 @@
       <div id="myBoard" class="chessboard"></div>
 
       <div id="state" class="message-container">
-        temps blanc: {{ this.timeWhite }}<br />
-        Temps black: {{ this.timeBlack }}
+        Temps blanc: {{ this.timeWhite }}<br />
+        Temps noire: {{ this.timeBlack }}
         <!--mettre div du message board ici-->
         <!--mettre div du message board ici-->
 
@@ -64,17 +64,15 @@ export default {
       config: {},
       play: true,
       players: 0,
-      timeLeftWhite: moment(60 * 10 * 1000),
-      timeLeftBlack: moment(60 * 10 * 1000),
+      timeLeftWhite: moment(60 * 1 * 1000),
+      timeLeftBlack: moment(60 * 1 * 1000),
       isWhiteTurn: true,
       playerId: null,
       nbMove: 0,
+      timer : undefined
     };
   },
   methods: {
-    updateTurn(msg) {
-      this.isWhiteTurn = msg.move.color !== "w";
-    },
     onDragStart(source, piece) {
       //piece = this.piece;
       // do not pick up pieces if the game is over
@@ -89,7 +87,6 @@ export default {
       ) {
         return false;
       }
-      console.log(this.color);
     },
 
     onDrop(source, target) {
@@ -125,15 +122,14 @@ export default {
       return new Chessboard("myBoard", config);
     },
     updateMoveHistory() {
-      console.log("yooo");
       return this.game.history({ verbose: true });
     },
   },
 
   mounted() {
-    setInterval(() => {
+    this.timer = setInterval(() => {
       if (this.game.history().length > 0) {
-        if (this.isWhiteTurn) {
+        if (this.game.turn() === 'w') {
           this.timeLeftWhite = moment(
             this.timeLeftWhite.subtract(1, "seconds")
           );
@@ -142,6 +138,9 @@ export default {
             this.timeLeftBlack.subtract(1, "seconds")
           );
         }
+      if((this.timeLeftWhite.seconds() <= 0 && this.timeLeftWhite.minutes() <= 0) || (this.timeLeftBlack.seconds() <= 0 && this.timeLeftBlack.minutes() <= 0)) {
+        clearInterval(this.timer)
+      }
       }
     }, 1000);
 
@@ -202,18 +201,14 @@ export default {
       if (msg == this.roomId) {
         this.play = false;
       }
-      console.log(msg);
     });
 
     socket.on("move", msg => {
-      this.updateTurn(msg);
       if (msg.room == roomId) {
-        console.log(JSON.stringify(msg));
         game.move(msg.move);
         board.position(game.fen());
-        console.log("moved : " + msg.move.to);
+        // // console.log("moved : " + msg.move.to);
         this.currentMove = game.history({ verbose: true });
-        console.log(this.currentMove);
       }
     });
 
