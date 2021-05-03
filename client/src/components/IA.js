@@ -1,3 +1,6 @@
+/* IMPORTANT -> This IA is still in progress but he is playable
+   the implementation is naive
+*/
 /**
  * When use with filter returns a list of capturable move
  *
@@ -33,6 +36,7 @@ function isNotCapturable(moves){
  * @param capturedPiece         The possible capture piece
  * @return Integer              The point allowed for a capture
  */
+// change for a switch statement
 function givePointToMove(capturedPiece){
     if (capturedPiece === "p"){
         return 1;
@@ -133,8 +137,6 @@ function pieceToProtect(game, iaMove){
     moveDef = bestAttack(game);
     if (moveDef !== null){
         pieceToProtect = moveDef.to;
-    //    console.log(pieceToProtect);
-        console.log("Piece to protect position : " + pieceToProtect);
     }
     game.undo();
     return pieceToProtect;
@@ -156,8 +158,6 @@ function movePieceToProtect(game, positionOfPieceToProtect){
     var noDangerMove = [];
     if (possibleMovePieceToProtect.length !==0){
 	noDangerMove = randomMoveNoDanger(game, possibleMovePieceToProtect);
-    //    console.log(possibleMovePieceToProtect);
-    //    console.log(noDangerMove);
         if (noDangerMove.length !==0){
             moveDefensif = game.move(noDangerMove[Math.floor(Math.random() * noDangerMove.length)]);
             game.undo();
@@ -214,7 +214,16 @@ function randomMoveNoDanger2(game, randomMove) {
     return allSecurityMove;
 }
 
-
+/**
+ * return the list of all possible move to put a piece in a safe square
+ * or an empty list if the piece is squeeze
+ *
+ * The game must be a valid game
+ *
+ * @param game                  The chess.js game object
+ * @param attackMove            The attackMove
+ * @return move                 The move who represent the best counter attack
+ */
 function counterAttackPiece(game, attackMove){
     var move = null;
     //piece = null;
@@ -223,6 +232,25 @@ function counterAttackPiece(game, attackMove){
     game.undo();
     return move;
 }
+
+/*---------------------------------------------------------
+ *---------------- Public Function-------------------------
+ *----------------------------------------------------------
+ */
+
+
+/**
+ * return the best move for a easyIa
+ *
+ * This IA have some problem when defending on a board with
+ * multiple attack possible at the same time
+ * The game must be a valid game
+ * The move is suppose to be always a valid (more testing had to be done for the moment)
+ * But this function must return always a valid move
+ *
+ * @param game                  The chess.js game object
+ * @return finalMove            The choice of the final move for a easy IA
+ */
 
 function easyIa(game){
     var moveAttack = null;
@@ -240,24 +268,15 @@ function easyIa(game){
         moveAttack = bestAttack(game);
         if (moveAttack !== null){
             counterAttackMove = counterAttackPiece(game, moveAttack);
-            console.log(moveDef);
             if (counterAttackMove !== null){
-            //    console.log(givePointToMove(moveAttack.captured));
-            //    console.log(givePointToMove(moveDef.piece));
                 if (givePointToMove(moveAttack.captured) >=  givePointToMove(counterAttackMove.captured)){
-                    console.log("moveAttaque parce que DefMove plus petit");
                     finalMove = moveAttack;
                 } else {
-                    console.log("DefMove plus grand que move attaque");
-                    console.log(randomMove);
                     moveDef = movePieceToProtect(game, counterAttackMove.to);
                     if (moveDef !== null){
-                        console.log("math probleme");
                         finalMove = moveDef;
                     } else {
-                        console.log("math probleme2");
                         securityMove = randomMoveNoDanger2(game, iaNoCaptureMove);
-                        console.log(securityMove);
                         finalMove = securityMove[Math.floor(Math.random() * securityMove.length)];
                         if (securityMove.length === 0){
                             finalMove = randomMove;
@@ -266,49 +285,27 @@ function easyIa(game){
 
                 }
             } else {
-                console.log("moveAttaque parce qu aucune contre attaque");
                 finalMove = moveAttack;
             }
         } else {
+            // test if a move can make the human attack out of reach
             securityMove = randomMoveNoDanger2(game, iaNoCaptureMove);
-            console.log(securityMove);
             if (securityMove.length !== 0){
-                console.log("math probleme");
                 finalMove = securityMove[Math.floor(Math.random() * securityMove.length)];
             } else {
-                console.log("math probleme2");
+                //  This part have some problem when the board have multiple
+                //  possibility.  The best part to upgrade for a better IA
                 positionPieceToProtect = pieceToProtect(game, randomMove);
-                console.log(randomMove);
-                // console.log(positionPieceToProtect);
                 finalMove = movePieceToProtect(game, positionPieceToProtect);
                 if (finalMove === null){
                     console.log("randomMove");
                     finalMove = randomMove;
                 }
             }
-
-            /*console.log("pas de move d attaque random move");
-            positionPieceToProtect = pieceToProtect(game, randomMove);
-            console.log(randomMove);
-           // console.log(positionPieceToProtect);
-            moveDef = movePieceToProtect(game, positionPieceToProtect);
-            if (moveDef !== null){
-                console.log("math probleme");
-                finalMove = moveDef;
-            } else {
-                console.log("math probleme2");
-                securityMove = randomMoveNoDanger2(game, iaNoCaptureMove);
-		console.log(securityMove);
-                finalMove = securityMove[Math.floor(Math.random() * securityMove.length)];
-                if (securityMove.length === 0){
-                    finalMove = randomMove;
-                }
-            }*/
         }
     } else {
         finalMove=moveAttack;
     }
-    console.log(finalMove);
     return finalMove;
 }
 export {easyIa}
