@@ -1,12 +1,11 @@
 <template>
   <div>
-    <h1 class="mt-4">Demandes de parties</h1>
+    <h1 class="mt-4">Mes parties</h1>
     <br />
     <div class="friend-container">
       <div class="friend-search-list">
         <div class="list-group">
           <a
-            href="#"
             class="list-group-item list-group-item-action"
             v-for="item in gameRequests"
             :key="item.start_date"
@@ -18,15 +17,17 @@
                 aria-hidden="true"
               ></b-icon>
               <div>
-                <p class="mt-3">{{ item.player1 }} VS {{ item.player2 }}</p>
+                <p class="mt-3">{{ username }} VS {{ getOpponent(item) }}</p>
+                <small class="mt-3"> Statut : {{item.status}} </small> 
+                <span class="error text-danger" ><small>{{errorGame}}</small></span>
               </div>
               <b-button
                 size="sm"
                 variant="primary"
                 class="mb-2"
-                @click="acceptGameRequest(item.game_id)"
+                @click="acceptGameRequest(item.game_id, getOpponent(item), item.status)"
               >
-                Accepter le challenge
+                Joindre la partie
               </b-button>
             </div>
           </a>
@@ -39,11 +40,13 @@
   </div>
 </template>
 <script>
-
+import store from "../store";
 export default {
   data: () => ({
     gameRequests: [],
     noResult: false,
+    username: store.getters.username,
+    errorGame: ''
   }),
 
   beforeCreate() {
@@ -77,15 +80,23 @@ export default {
           console.log(error);
         });
     },
-    acceptGameRequest(game_id) {
-        console.log(game_id)
-      this.$store
+    acceptGameRequest(game_id, opponent, status) {
+      //console.log(game_id);
+      if (status != 'Completed'){
+        
+        this.$store
         .dispatch("acceptGameRequest", game_id)
         .then((resp) => {
           if (resp.status == 201) {
             this.makeToast("Invitation de partie acceptée!");
             this.getGameRequests();
-            this.$router.replace('/play/GameRoom')
+            this.$router.push({
+              path: "/play/GameRoom",
+              query: {
+                opponent: opponent,
+                game_id: game_id,
+              },
+            });
           } else {
             this.makeToast("Erreur avec le serveur, veuillez réesayer");
           }
@@ -93,7 +104,21 @@ export default {
         .catch((error) => {
           console.log(error);
         });
+      } else {
+        //this.errorGame = 'La partie est terminée.'
+        alert('La partie est terminée.')
+      }
+      
     },
+
+    getOpponent(item){
+      if(item.player1 == this.username){
+        return item.player2
+      } else {
+        return item.player1
+      }
+    },
+
     makeToast(message) {
       this.$bvToast.toast(message, {
         title: "Requête d'ami acceptée",

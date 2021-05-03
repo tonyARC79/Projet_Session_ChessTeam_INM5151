@@ -4,6 +4,7 @@ var cors = require('cors')
 const jwt = require("jsonwebtoken");
 const authorized = require("../utils/Authorization");
 const { body, validationResult } = require('express-validator');
+const { Op } = require('sequelize')
 
 app = express()
 
@@ -185,7 +186,7 @@ app.get("/me/game/requests", authorized(), cors(), async (req, res) => {
   }
 });
 
-app.patch('/me/game/accept', authorized(),[body('game_id')], async (req, res) => {
+app.patch('/me/game/accept', authorized(), [body('game_id')], async (req, res) => {
 
   //let token = jwt.decode(req.get("Authorization").split(" ")[1]);
   //let player2 = token.username
@@ -202,11 +203,11 @@ app.patch('/me/game/accept', authorized(),[body('game_id')], async (req, res) =>
       game_id: gameID
 
     }
-  }).then( game => {
-    if(game) {
-      game.update(updatedGame).then( result => {
-        res.status(201).json( {
-          "message" : 'Game in progress'
+  }).then(game => {
+    if (game) {
+      game.update(updatedGame).then(result => {
+        res.status(201).json({
+          "message": 'Game in progress'
         })
       })
     }
@@ -220,8 +221,9 @@ app.patch('/me/game/accept', authorized(),[body('game_id')], async (req, res) =>
 async function getGameRequests(userID) {
   return await models.game.findAll({
     where: {
-      player2: userID,
-      status: 'pending'
+      //player2: userID,
+      //status: 'pending',
+      [Op.or]: [{ player1: userID }, { player2: userID }],
     }
   }).then(games => {
     return games;
@@ -231,17 +233,65 @@ async function getGameRequests(userID) {
     });
 }
 
-// async function getCurrentGames(userID) {
-//   return await models.game.findAll({
-//     where: {
-//       player2: userID,
-//       status: 'pending'
-//     }
-//   }).then(games => {
-//     return games;
-//   })
-//     .catch(err => {
-//       throw new Error(err)
-//     });
-// }
+app.get("/me/game/info", [body('game_id')], cors(), async (req, res) => {
+  //let userID = jwt.decode(req.get("Authorization").split(" ")[1]);
+  //userID = userID.username;
+  game_id = body.game_id
+  try {
+    let GameInfos = await getGameInfoByID(game_id);
+    res.json(GameInfos)
+
+  }
+  catch (err) {
+    console.log(err)
+    res.status(500).json({ error: "Server Error" })
+  }
+});
+
+async function getGameInfoByID(game_id) {
+  return await models.game.findAll({
+    where: {
+      game_id: game_id,
+      status: 'Game in progress'
+    }
+  }).then(games => {
+    return games;
+  })
+    .catch(err => {
+      throw new Error(err)
+    });
+}
+
+
+app.patch('/me/game/result', authorized(), [body('game_id'), body('winner'), body('moves') ], async (req, res) => {
+  let updatedGame = {}
+  const errors = validationResult(req)
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
+  }
+
+  updatedGame.status = 'Completed'
+  updatedGame.winner = req.body.winner
+  updatedGame.fen = req.body.moves + ''
+  gameID = req.body.game_id
+  models.game.findOne({
+    where: {
+      game_id: gameID
+
+    }
+  }).then(game => {
+    if (game) {
+      game.update(updatedGame).then(result => {
+        res.status(201).json({
+          "message": 'Game is finished and ' + updatedGame.winner + ' is the winner!'
+        })
+      })
+    }
+  }).catch(err => {
+    console.log(err)
+    res.status(500).json({ error: "Server Error" })
+  });
+
+})
+
 module.exports = app;

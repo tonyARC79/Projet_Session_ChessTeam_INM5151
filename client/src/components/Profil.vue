@@ -35,14 +35,13 @@
                 <span class="number3">3500</span>
               </div>
             </div>
-            <div class="button mt-2 d-flex flex-row align-items-center">
-              <!-- <button class="btn btn-sm btn-outline-primary w-100">Envoyer un message</button> -->
+            <!-- <div class="button mt-2 d-flex flex-row align-items-center">
               <router-link
                 class="btn btn-sm btn-primary w-100 ml-2"
                 to="/play/GameRoom"
                 >Play Room 1</router-link
               >
-            </div>
+            </div> -->
           </div>
         </div>
       </div>
@@ -79,18 +78,14 @@
                 >Invitations en attente</span
               >
             </b-link>
-            <b-link
-              href="/game_requests"
-              class="d-flex w-100 friend-link p-1"
-            >
-              
-                <img
-                  src="../images/playGameFriend_BasicIcon.png"
-                  alt=""
-                  height="35"
-                />
+            <b-link href="/game_requests" class="d-flex w-100 friend-link p-1">
+              <img
+                src="../images/playGameFriend_BasicIcon.png"
+                alt=""
+                height="35"
+              />
               <span class="ml-3 align-items-center d-inline-flex"
-                >Demandes de parties</span
+                >Mes parties</span
               >
             </b-link>
           </div>

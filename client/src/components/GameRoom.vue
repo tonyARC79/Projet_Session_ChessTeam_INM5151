@@ -14,8 +14,8 @@
         <!--mettre div du message board ici-->
         <!--mettre div du message board ici-->
 
-        <h3>{{ username }} VS Opponent</h3>
-        Moves: {{ this.updateMoveHistory() }}
+        <h2>{{ username }} VS {{ opponent }}</h2>
+         {{ updateMoveHistory() }}
       </div>
     </div>
   </div>
@@ -53,7 +53,7 @@ export default {
   data() {
     return {
       username: store.getters.username,
-      opponent: "",
+      opponent: this.$route.query.opponent,
       socket: io("http://localhost:5000", { transports: ["websocket"] }),
       game: new Chess(),
       color: "white",
@@ -64,12 +64,18 @@ export default {
       config: {},
       play: true,
       players: 0,
+      nbMoves: 0,
+      game_id: this.$route.query.game_id,
+      moves: '',
+      checkMessageMate: '',
+
       timeLeftWhite: moment(60 * 1 * 1000),
       timeLeftBlack: moment(60 * 1 * 1000),
       isWhiteTurn: true,
       playerId: null,
       nbMove: 0,
       timer : undefined
+
     };
   },
   methods: {
@@ -99,6 +105,41 @@ export default {
 
       if (this.game.game_over()) {
         this.socket.emit("gameOver", this.roomId);
+        let gameHistory = this.game.history({ verbose: true });
+        let index = gameHistory.length;
+        let winner = "";
+
+        if (gameHistory[index - 1].color == "b") {
+          if (this.color == "black") {
+            winner = this.username + " with " + this.color;
+          } else {
+            winner = this.opponent + " with " + "black";
+          }
+        } else {
+          if (this.color == "white") {
+            winner = this.username + " with " + this.color;
+          } else {
+            winner = this.opponent + " with " + "white";
+          }
+        }
+
+        let gameResults = {
+          game_id: this.game_id,
+          winner: winner,
+          moves: JSON.stringify(gameHistory) + '',
+        };
+        this.$store
+          .dispatch("setGameResult", gameResults)
+          .then((resp) => {
+            if (resp.status == 201) {
+              console.log("Félicitations! Vous avez gagné la partie! :D");
+            } else {
+              this.makeToast("Erreur avec le serveur, veuillez réesayer");
+            }
+          })
+          .catch((error) => {
+            console.log(error);
+          });
       }
       // illegal move
       if (move === null) {
@@ -109,6 +150,8 @@ export default {
           board: this.game.fen(),
           room: this.roomId,
         });
+        this.nbMoves++;
+        this.moves = this.game.history()
       }
     },
 
@@ -122,6 +165,20 @@ export default {
       return new Chessboard("myBoard", config);
     },
     updateMoveHistory() {
+
+      //console.log("yooo");
+      return 'Moves:  ' + this.moves;
+    },
+
+    getOpponentName() {
+      this.$store
+        .dispatch("getGameInfosById", this.$route.query.game_id)
+        .then((infos) => {
+          return infos.game_id;
+        })
+        .catch((error) => {
+          console.log(error);
+        });
       return this.game.history({ verbose: true });
     },
   },
@@ -207,8 +264,6 @@ export default {
       if (msg.room == roomId) {
         game.move(msg.move);
         board.position(game.fen());
-        // // console.log("moved : " + msg.move.to);
-        this.currentMove = game.history({ verbose: true });
       }
     });
 
@@ -233,9 +288,6 @@ export default {
       board = this.board;
     });
   },
-  // destroyed() {
-  //   this.socket.emit("disconnect");
-  // },
 };
 </script>
 <style lang="">
