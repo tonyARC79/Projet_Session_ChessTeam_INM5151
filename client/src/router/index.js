@@ -17,6 +17,7 @@ import Rules from '@/components/Tutorial/Rules.vue'
 import CheckMate from '@/components/Tutorial/CheckMate.vue'
 import Settings from '@/components/Settings.vue'
 import GameRequests from '@/components/GameRequests'
+import IaGameRoom from '@/components/IaRoom'
 
 Vue.use(Router)
 
@@ -156,6 +157,14 @@ let router = new Router({
         component: GameRequests,
         meta: {
             title: 'game_requests',
+        }
+    },
+    {
+        path: '/play/iaroom',
+        name: 'IaGameRoom',
+        component: IaGameRoom,
+        meta: {
+            title: 'ia',
         }
     }
     ]
