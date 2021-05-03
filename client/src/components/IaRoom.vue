@@ -61,22 +61,25 @@ function onDragStart (source, piece) {
 }
 
 function makeRandomMove () {
-  var move = easyIa(game);
-  game.move(move)
-  board.position(game.fen())
+  if (!game.game_over()){
+      var move = easyIa(game);
+      if (move === null) return
+      game.move(move)
+      board.position(game.fen())
+  }
 }
 
 function onDrop (source, target) {
   // see if the move is legal
-  var move = game.move({
+
+  var move1 = game.move({
     from: source,
     to: target,
     promotion: 'q' // NOTE: always promote to a queen for example simplicity
   })
-
   // illegal move
-  if (move === null) return 'snapback'
-
+  if (move1 === null) return 'snapback'
+  
   // make random legal move for black
   window.setTimeout(makeRandomMove, 250)
 }
@@ -86,7 +89,7 @@ function onDrop (source, target) {
 function onSnapEnd () {
   board.position(game.fen())
 }
- function pieceTheme(piece) {
+function pieceTheme(piece) {
       //piece = this.pieceTheme;
       // wikipedia theme for white pieces
       if (piece.search(/w/) !== -1) {
