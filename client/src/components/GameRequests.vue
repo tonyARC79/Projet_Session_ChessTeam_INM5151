@@ -18,12 +18,14 @@
               ></b-icon>
               <div>
                 <p class="mt-3">{{ username }} VS {{ getOpponent(item) }}</p>
+                <small class="mt-3"> Statut : {{item.status}} </small> 
+                <span class="error text-danger" ><small>{{errorGame}}</small></span>
               </div>
               <b-button
                 size="sm"
                 variant="primary"
                 class="mb-2"
-                @click="acceptGameRequest(item.game_id, getOpponent(item))"
+                @click="acceptGameRequest(item.game_id, getOpponent(item), item.status)"
               >
                 Joindre la partie
               </b-button>
@@ -44,6 +46,7 @@ export default {
     gameRequests: [],
     noResult: false,
     username: store.getters.username,
+    errorGame: ''
   }),
 
   beforeCreate() {
@@ -77,9 +80,11 @@ export default {
           console.log(error);
         });
     },
-    acceptGameRequest(game_id, opponent) {
-      console.log(game_id);
-      this.$store
+    acceptGameRequest(game_id, opponent, status) {
+      //console.log(game_id);
+      if (status != 'Completed'){
+        
+        this.$store
         .dispatch("acceptGameRequest", game_id)
         .then((resp) => {
           if (resp.status == 201) {
@@ -99,6 +104,11 @@ export default {
         .catch((error) => {
           console.log(error);
         });
+      } else {
+        //this.errorGame = 'La partie est terminée.'
+        alert('La partie est terminée.')
+      }
+      
     },
 
     getOpponent(item){
