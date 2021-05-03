@@ -15,7 +15,7 @@
         <!--mettre div du message board ici-->
 
         <h2>{{ username }} VS {{ opponent }}</h2>
-         {{ updateMoveHistory() }}
+        {{ updateMoveHistory() }}
       </div>
     </div>
   </div>
@@ -66,23 +66,22 @@ export default {
       players: 0,
       nbMoves: 0,
       game_id: this.$route.query.game_id,
-      moves: '',
-      checkMessageMate: '',
-
+      moves: "",
+      checkMessageMate: "",
       timeLeftWhite: moment(60 * 1 * 1000),
       timeLeftBlack: moment(60 * 1 * 1000),
       isWhiteTurn: true,
+      isTimerEnded: false,
       playerId: null,
       nbMove: 0,
-      timer : undefined
-
+      timer: undefined,
     };
   },
   methods: {
     onDragStart(source, piece) {
       //piece = this.piece;
       // do not pick up pieces if the game is over
-      if (this.game.game_over()) return false;
+      if (this.game.game_over() || this.isTimerEnded) return false;
 
       // only pick up pieces for the side to move
       if (
@@ -126,7 +125,7 @@ export default {
         let gameResults = {
           game_id: this.game_id,
           winner: winner,
-          moves: JSON.stringify(gameHistory) + '',
+          moves: JSON.stringify(gameHistory) + "",
         };
         this.$store
           .dispatch("setGameResult", gameResults)
@@ -151,7 +150,7 @@ export default {
           room: this.roomId,
         });
         this.nbMoves++;
-        this.moves = this.game.history()
+        this.moves = this.game.history();
       }
     },
 
@@ -165,9 +164,7 @@ export default {
       return new Chessboard("myBoard", config);
     },
     updateMoveHistory() {
-
-      //console.log("yooo");
-      return 'Moves:  ' + this.moves;
+      return "Moves:  " + this.moves;
     },
 
     getOpponentName() {
@@ -181,12 +178,48 @@ export default {
         });
       return this.game.history({ verbose: true });
     },
+    setWinner() {
+      let gameHistory = this.game.history({ verbose: true });
+      let index = gameHistory.length;
+      let winner = "";
+      this.isTimerEnded = true;
+      if (gameHistory[index - 1].color == "b") {
+        if (this.color == "black") {
+          winner = this.username + " with " + this.color;
+        } else {
+          winner = this.opponent + " with " + "black";
+        }
+      } else {
+        if (this.color == "white") {
+          winner = this.username + " with " + this.color;
+        } else {
+          winner = this.opponent + " with " + "white";
+        }
+      }
+      let gameResults = {
+        game_id: this.game_id,
+        winner: winner,
+        moves: JSON.stringify(gameHistory) + "",
+      };
+      this.$store
+        .dispatch("setGameResult", gameResults)
+        .then((resp) => {
+          if (resp.status == 201) {
+            console.log("Félicitations! Vous avez gagné la partie! :D");
+          } else {
+            this.makeToast("Erreur avec le serveur, veuillez réesayer");
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
   },
 
   mounted() {
     this.timer = setInterval(() => {
       if (this.game.history().length > 0) {
-        if (this.game.turn() === 'w') {
+        if (this.game.turn() === "w") {
           this.timeLeftWhite = moment(
             this.timeLeftWhite.subtract(1, "seconds")
           );
@@ -195,9 +228,18 @@ export default {
             this.timeLeftBlack.subtract(1, "seconds")
           );
         }
-      if((this.timeLeftWhite.seconds() <= 0 && this.timeLeftWhite.minutes() <= 0) || (this.timeLeftBlack.seconds() <= 0 && this.timeLeftBlack.minutes() <= 0)) {
-        clearInterval(this.timer)
-      }
+        if (
+          (this.timeLeftWhite.seconds() <= 0 &&
+            this.timeLeftWhite.minutes() <= 0) ||
+          (this.timeLeftBlack.seconds() <= 0 &&
+            this.timeLeftBlack.minutes() <= 0)
+        ) {
+          clearInterval(this.timer);
+          this.setWinner();
+        }
+        else if (this.game.game_over()) {
+          clearInterval(this.timer);
+        }
       }
     }, 1000);
 
@@ -260,7 +302,7 @@ export default {
       }
     });
 
-    socket.on("move", msg => {
+    socket.on("move", (msg) => {
       if (msg.room == roomId) {
         game.move(msg.move);
         board.position(game.fen());

@@ -25,7 +25,7 @@
           d'apprentissage!
           <br>
           Pour utiliser l&apos;application, vous devez créer un compte
-          utilisateur. Inscrivivez vous dès maintenant.
+          utilisateur. Inscrivez vous dès maintenant.
         </p>
       </div>
       <div class="home-register">
