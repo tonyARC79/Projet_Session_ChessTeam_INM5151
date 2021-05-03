@@ -184,18 +184,13 @@ function randomMoveNoDanger(game, randomMove) {
     for (var i = 0; i < randomMove.length; i++) {
         move = game.move(randomMove[i]);
         bestAttackMove = bestAttack(game);
-        console.log(bestAttackMove);
-        console.log(move);
         if (bestAttackMove === null){
             allSecurityMove.push(randomMove[i]);
         } else if (bestAttackMove.captured !== move.piece){
-                console.log(bestAttackMove.captured);
-                console.log(move.piece);
 		allSecurityMove.push(randomMove[i]);
         }
         game.undo();
     }
-    console.log(allSecurityMove);
     return allSecurityMove;
 }
 
@@ -210,7 +205,6 @@ function randomMoveNoDanger2(game, randomMove) {
         }
         game.undo();
     }
-    console.log(allSecurityMove);
     return allSecurityMove;
 }
 
