@@ -9,6 +9,9 @@
       <div id="myBoard" class="chessboard"></div>
 
       <div id="state" class="message-container">
+        Temps blanc: {{ this.timeWhite }}<br />
+        Temps noire: {{ this.timeBlack }}
+        <!--mettre div du message board ici-->
         <!--mettre div du message board ici-->
 
         <h2>{{ username }} VS {{ opponent }}</h2>
@@ -19,6 +22,7 @@
 </template>
 
 <script>
+import moment from "moment";
 import Chessboard from "chessboardjs";
 import Chess from "chess.js";
 import io from "socket.io-client";
@@ -38,6 +42,14 @@ import store from "../store";
 
 export default {
   name: "GameRoom",
+  computed: {
+    timeWhite: function () {
+      return this.timeLeftWhite.format("mm:ss");
+    },
+    timeBlack: function () {
+      return this.timeLeftBlack.format("mm:ss");
+    },
+  },
   data() {
     return {
       username: store.getters.username,
@@ -55,7 +67,15 @@ export default {
       nbMoves: 0,
       game_id: this.$route.query.game_id,
       moves: '',
-      checkMessageMate: ''
+      checkMessageMate: '',
+
+      timeLeftWhite: moment(60 * 1 * 1000),
+      timeLeftBlack: moment(60 * 1 * 1000),
+      isWhiteTurn: true,
+      playerId: null,
+      nbMove: 0,
+      timer : undefined
+
     };
   },
   methods: {
@@ -73,7 +93,6 @@ export default {
       ) {
         return false;
       }
-      console.log(this.color);
     },
 
     onDrop(source, target) {
@@ -146,6 +165,7 @@ export default {
       return new Chessboard("myBoard", config);
     },
     updateMoveHistory() {
+
       //console.log("yooo");
       return 'Moves:  ' + this.moves;
     },
@@ -159,10 +179,28 @@ export default {
         .catch((error) => {
           console.log(error);
         });
+      return this.game.history({ verbose: true });
     },
   },
 
   mounted() {
+    this.timer = setInterval(() => {
+      if (this.game.history().length > 0) {
+        if (this.game.turn() === 'w') {
+          this.timeLeftWhite = moment(
+            this.timeLeftWhite.subtract(1, "seconds")
+          );
+        } else {
+          this.timeLeftBlack = moment(
+            this.timeLeftBlack.subtract(1, "seconds")
+          );
+        }
+      if((this.timeLeftWhite.seconds() <= 0 && this.timeLeftWhite.minutes() <= 0) || (this.timeLeftBlack.seconds() <= 0 && this.timeLeftBlack.minutes() <= 0)) {
+        clearInterval(this.timer)
+      }
+      }
+    }, 1000);
+
     /* eslint-disable no-unused-vars */
     var board = null;
     var socket = this.socket;
@@ -220,14 +258,12 @@ export default {
       if (msg == this.roomId) {
         this.play = false;
       }
-      console.log(msg);
     });
 
-    socket.on("move", function (msg) {
+    socket.on("move", msg => {
       if (msg.room == roomId) {
         game.move(msg.move);
         board.position(game.fen());
-        console.log("moved : " + msg.move.to);
       }
     });
 

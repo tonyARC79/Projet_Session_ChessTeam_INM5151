@@ -5,7 +5,6 @@
       <div class="friend-search-list">
         <div class="list-group">
           <a
-            
             href="#"
             class="list-group-item list-group-item-action"
             v-for="item in lesUtilisateurs"
@@ -13,21 +12,21 @@
           >
             <div class="d-flex w-100 justify-content-between">
               <b-icon icon="person-fill" aria-hidden="true"></b-icon>
+              <div>
+              <p class="mb-1">{{ item.username }}</p>
+              <small>Rejoint le : {{ item.date_registered | moment }}</small>
+              </div>
+              <div>
+                <img
+                  src="../../images/PawnLogo.png"
+                  alt=""
+                  height="60"
+                  width="60"
+                  v-on:click="sendFriendGameRequest(item.username)"
+                />
+                <span>Challenge</span>
+              </div>
             </div>
-            <p class="mb-1">{{ item.username }}</p>
-            <small>Rejoint le : {{ item.date_registered | moment }}</small>
-            <a href="">
-              <br /><img
-                src="../../images/PawnLogo.png"
-                alt=""
-                height="60"
-                width="60"
-                @click="sendFriendGameRequest(item.username)"
-              />
-              <!-- <i class="far fa-chess-clock-alt"></i> -->
-              
-            </a>
-            <span>Challenge</span>
           </a>
 
           <p v-if="noResult">Vous n'avez aucune ami</p>
@@ -53,26 +52,26 @@ export default {
     },
   },
   methods: {
-    onClickButton(item) {
-      this.$emit("clicked", item);
-    },
     sendFriendGameRequest(username) {
-      console.log("sendFriendGameRequest function called!");
       this.$store
         .dispatch("sendFriendGameRequest", username)
         .then((resp) => {
           if (resp.status == 201) {
             this.makeToast(`Requête de partie envoyée à ${username}`);
-            this.lesUtilisateurs = [];
-            this.$router.replace('/user/me')
-          } else {
-            // erreur
-            this.noResult = false;
+            this.$router.replace("/user/me");
           }
         })
         .catch((error) => {
           console.log(error);
         });
+    },
+    makeToast(message) {
+      this.$bvToast.toast(message, {
+        title: "Requête de partie envoyée",
+        autoHideDelay: 5000,
+        appendToast: true,
+        toaster: "b-toaster-top-center",
+      });
     },
   },
   beforeCreate() {
