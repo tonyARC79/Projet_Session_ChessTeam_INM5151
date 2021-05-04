@@ -16,6 +16,8 @@ import Move from '@/components/Tutorial/Move.vue'
 import Rules from '@/components/Tutorial/Rules.vue'
 import CheckMate from '@/components/Tutorial/CheckMate.vue'
 import Settings from '@/components/Settings.vue'
+import GameRequests from '@/components/GameRequests'
+import IaGameRoom from '@/components/IaRoom'
 
 Vue.use(Router)
 
@@ -23,15 +25,11 @@ let router = new Router({
     mode: 'history',
     base: process.env.BASE_URL,
     routes: [{
-        path: '/home',
-        name: 'home',
-        component: Home
-    }, {
         path: '/',
-        name: 'session',
-        component: Login,
+        name: 'Accueil',
+        component: Home,
         meta: {
-            title: 'Session',
+            title: 'Accueil',
         }
     },
     {
@@ -43,6 +41,7 @@ let router = new Router({
         path: '/join',
         name: 'join',
         component: Register,
+        props: true,
         meta: {
             title: 'Inscription',
         }
@@ -151,8 +150,23 @@ let router = new Router({
         meta: {
             title: 'EchecEtMat',
         }
+    },
+    {
+        path: '/game_requests',
+        name: 'game_requests',
+        component: GameRequests,
+        meta: {
+            title: 'game_requests',
+        }
+    },
+    {
+        path: '/play/iaroom',
+        name: 'IaGameRoom',
+        component: IaGameRoom,
+        meta: {
+            title: 'ia',
+        }
     }
-
     ]
 });
 

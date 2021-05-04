@@ -1,30 +1,27 @@
+
 <template>
   <div>
-    <h3 v-if="username">
-      Bonjour {{ username }} !
-    </h3>
-
-    <h3 v-if="!username">Désolé, vous n'êtes pas authentifié :(</h3>
-
     
-
-    <img v-if="username" src="../images/fullLogoRed.png" width="25%" height="25%" alt="">
-
+    <HomePublic v-if="!isAuthenticated" />
+    <HomePrivate v-else> </HomePrivate>
   </div>
 </template>
 
 <script>
-import store from "../store";
+import HomePublic from './HomePublic.vue'
+import HomePrivate from './HomePrivate.vue'
+import { mapGetters } from "vuex";
 export default {
   name: "Home",
-  data() {
-    return {
-      username: store.getters.username,
-    };
+  components: {
+    HomePublic,
+    HomePrivate
+  },
+  computed: {
+    ...mapGetters(["isAuthenticated"]),
   },
 };
 
-//{"websocket":true,"origins":["*:*"],"cookie_needed":false,"entropy":1051744105}
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->

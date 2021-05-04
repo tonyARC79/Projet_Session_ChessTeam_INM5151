@@ -32,7 +32,7 @@
         <friends v-if="this.gameMode === 'Ami'" @clicked="onClickChild" />
         <br />
         <br />
-        <b-button type="submit" v-on:click="launchGame">Jouer</b-button>
+        <b-button @click="launchGame">Jouer</b-button>
       </div>
     </div>
   </div>
@@ -51,6 +51,7 @@ export default {
     gameMode: "Aléatoire",
     userA: "",
     userB: "",
+    noResult: ''
   }),
   mounted() {
     this.userA = this.$store.getters.username;
@@ -68,15 +69,20 @@ export default {
     launchGame() {
       if (this.gameMode === "Ami") {
         console.log(this.userB);
-        /* this.$store
-          .dispatch("game", {
-            time: this.time,
-            userA: this.userA,
-            userB: this.userB
-          }) 
-          .then(() => {
-            this.$router.replace("/friends");
-          }*/
+        this.$store
+        .dispatch("sendFriendGameRequest", this.userB)
+        .then((resp) => {
+          if (resp.status == 201) {
+            this.makeToast(`Requête de partie envoyée à ${this.userB}`);
+            this.$router.replace('/user/me')
+          } else {
+            // erreur
+            this.noResult = false;
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
       }
     },
   },

@@ -165,6 +165,99 @@ export default new Vuex.Store({
           })
       })
     },
+    sendFriendGameRequest(_, usernameQuery) {
+      return new Promise((resolve, reject) => {
+        axios.post('/api/friend/game', {
+          opponent: usernameQuery
+        },
+          {
+            headers: {
+              Authorization: 'Bearer ' + localStorage.getItem('token')
+            }
+          })
+          .then(resp => {
+            resolve(resp)
+          })
+          .catch(err => {
+            reject(err)
+          })
+      })
+    },
+    getGameRequests() {
+      return new Promise((resolve, reject) => {
+        axios.get('/api/me/game/requests',
+          {
+            headers: {
+              Authorization: 'Bearer ' + localStorage.getItem('token')
+            }
+          })
+          .then(resp => {
+            resolve(resp.data)
+          })
+          .catch(err => {
+            reject(err)
+          })
+      })
+    },
+    getGameInfosById(_, id) {
+      return new Promise((resolve, reject) => {
+        axios.get('/api/me/game/info', {
+          game_id: id
+        },
+          {
+            headers: {
+              Authorization: 'Bearer ' + localStorage.getItem('token')
+            }
+          })
+          .then(resp => {
+            resolve(resp.data)
+          })
+          .catch(err => {
+            reject(err)
+          })
+      })
+    },
+    acceptGameRequest({ commit }, gameInfo) {
+      return new Promise((resolve, reject) => {
+        commit('requete_auth')
+        axios.patch('api/me/game/accept', {
+          game_id: gameInfo
+
+        },
+          {
+            headers: {
+              Authorization: 'Bearer ' + localStorage.getItem('token')
+            }
+          })
+          .then(resp => {
+            resolve(resp)
+          })
+          .catch(err => {
+            reject(err)
+          })
+      })
+    },
+    setGameResult({ commit }, gameResults) {
+      return new Promise((resolve, reject) => {
+        commit('requete_auth')
+        axios.patch('api/me/game/result', {
+          game_id: gameResults.game_id,
+          winner: gameResults.winner,
+          moves: gameResults.moves
+        },
+          {
+            headers: {
+              Authorization: 'Bearer ' + localStorage.getItem('token')
+            }
+          })
+          .then(resp => {
+            resolve(resp)
+          })
+          .catch(err => {
+            reject(err)
+          })
+      })
+    },
     getFriendsRequests() {
       return new Promise((resolve, reject) => {
         axios.get('/api/me/requests',
@@ -229,7 +322,6 @@ export default new Vuex.Store({
 
     deleteUserAccount({ commit }) {
       return new Promise((resolve, reject) => {
-        //commit('requete_auth')
         axios.patch('/api/user/delete',
           {
             headers: {

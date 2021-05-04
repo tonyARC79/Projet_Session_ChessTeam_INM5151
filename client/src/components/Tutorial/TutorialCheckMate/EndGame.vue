@@ -2,6 +2,7 @@
 //NE PAS EVALUER Copier coller de l'exemple fourni avec chessboard.vue
 //Le but est simplement de permettre au joueur de terminer sa partie.
 import { chessboard } from "vue-chessboard";
+import { easyIa } from "./IA.js";
 export default {
   name: "newboard",
   extends: chessboard,
@@ -20,18 +21,21 @@ export default {
       };
     },
     aiNextMove() {
-      let moves = this.game.moves({ verbose: true });
-      let randomMove = moves[Math.floor(Math.random() * moves.length)];
-      this.game.move(randomMove);
-      this.board.set({
-        fen: this.game.fen(),
-        turnColor: this.toColor(),
-        movable: {
-          color: this.toColor(),
-          dests: this.possibleMoves(),
-          events: { after: this.userPlay() },
-        },
-      });
+      console.log("===============TOUR==============")
+      if (!this.game.game_over()) {
+        var move = easyIa(this.game);
+        console.log(move);
+        this.game.move(move);
+        this.board.set({
+          fen: this.game.fen(),
+          turnColor: this.toColor(),
+          movable: {
+            color: this.toColor(),
+            dests: this.possibleMoves(),
+            events: { after: this.userPlay() },
+          },
+        });
+      }
     },
   },
   mounted() {
@@ -41,4 +45,3 @@ export default {
   },
 };
 </script>
-

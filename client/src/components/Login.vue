@@ -77,7 +77,7 @@ export default {
             password: this.user.password,
           })
           .then(() => {
-            this.$router.replace("/home");
+            this.$router.replace("/");
           })
           .catch(() => {
             this.formulaireValide = false;
