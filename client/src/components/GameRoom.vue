@@ -10,12 +10,23 @@
 
       <div id="state" class="message-container">
         Temps blanc: {{ this.timeWhite }}<br />
-        Temps noire: {{ this.timeBlack }}
+        Temps noir: {{ this.timeBlack }}
         <!--mettre div du message board ici-->
         <!--mettre div du message board ici-->
 
         <h2>{{ username }} VS {{ opponent }}</h2>
-        {{ updateMoveHistory() }}
+          <h4><strong>Moves </strong></h4>
+        <div style="overflow-y: scroll; height: 400px">
+          <!-- <br> -->
+          <a
+            v-for="(move, index) in moves"
+            :key="index"
+            class="list-group-item list-group-item-action"
+          >
+            {{ index + 1 + ".\t  " + move.color + ": " + move.san }}
+          </a>
+        </div>
+        <div v-if="gameOver">Winner is: {{winner + '. Congradulations!'}}</div>
       </div>
     </div>
   </div>
@@ -66,15 +77,18 @@ export default {
       players: 0,
       nbMoves: 0,
       game_id: this.$route.query.game_id,
-      moves: "",
+      moves: [],
       checkMessageMate: "",
-      timeLeftWhite: moment(60 * 1 * 1000),
-      timeLeftBlack: moment(60 * 1 * 1000),
+      timeLeftWhite: moment(60 * 10 * 1000),
+      timeLeftBlack: moment(60 * 10 * 1000),
       isWhiteTurn: true,
       isTimerEnded: false,
       playerId: null,
       nbMove: 0,
       timer: undefined,
+      gameOver: false,
+      winner: "",
+      winColor: ''
     };
   },
   methods: {
@@ -101,27 +115,29 @@ export default {
         to: target,
         promotion: "q", // NOTE: always promote to a queen for example simplicity
       });
-
+      let winner = "";
       if (this.game.game_over()) {
         this.socket.emit("gameOver", this.roomId);
         let gameHistory = this.game.history({ verbose: true });
         let index = gameHistory.length;
-        let winner = "";
-
+        
+        this.gameOver = true;
         if (gameHistory[index - 1].color == "b") {
           if (this.color == "black") {
             winner = this.username + " with " + this.color;
           } else {
             winner = this.opponent + " with " + "black";
           }
+          this.winColor = 'black'
         } else {
           if (this.color == "white") {
             winner = this.username + " with " + this.color;
           } else {
             winner = this.opponent + " with " + "white";
           }
+          this.winColor = 'white'
         }
-
+        this.winner = winner;
         let gameResults = {
           game_id: this.game_id,
           winner: winner,
@@ -150,7 +166,8 @@ export default {
           room: this.roomId,
         });
         this.nbMoves++;
-        this.moves = this.game.history();
+        this.moves = this.game.history({ verbose: true });
+        
       }
     },
 
@@ -164,20 +181,13 @@ export default {
       return new Chessboard("myBoard", config);
     },
     updateMoveHistory() {
-      return "Moves:  " + this.moves;
+      return this.moves;
+    },
+    scrollToEnd() {
+      // scroll to the start of the last message
+      this.$el.scrollTop = this.$el.lastElementChild.offsetTop;
     },
 
-    getOpponentName() {
-      this.$store
-        .dispatch("getGameInfosById", this.$route.query.game_id)
-        .then((infos) => {
-          return infos.game_id;
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-      return this.game.history({ verbose: true });
-    },
     setWinner() {
       let gameHistory = this.game.history({ verbose: true });
       let index = gameHistory.length;
@@ -215,7 +225,10 @@ export default {
         });
     },
   },
-
+  updated() {
+    // whenever data changes and the component re-renders, this is called.
+    this.$nextTick(() => this.scrollToEnd());
+  },
   mounted() {
     this.timer = setInterval(() => {
       if (this.game.history().length > 0) {
@@ -236,8 +249,7 @@ export default {
         ) {
           clearInterval(this.timer);
           this.setWinner();
-        }
-        else if (this.game.game_over()) {
+        } else if (this.game.game_over()) {
           clearInterval(this.timer);
         }
       }
@@ -306,6 +318,7 @@ export default {
       if (msg.room == roomId) {
         game.move(msg.move);
         board.position(game.fen());
+        this.moves = game.history({ verbose: true });
       }
     });
 
